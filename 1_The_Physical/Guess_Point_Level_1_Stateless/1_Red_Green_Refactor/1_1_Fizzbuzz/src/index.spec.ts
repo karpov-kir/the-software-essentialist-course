@@ -5,6 +5,10 @@ describe("fizzbuzz", () => {
         expect(() => fizzbuzz(0)).toThrow()
     })
 
+    it('throws an error for numbers greater than 100 such as 101', () => {
+        expect(() => fizzbuzz(101)).toThrow()
+    })
+
     it('returns a number such as 10 as a string', () => {
         expect(typeof fizzbuzz(10) === 'string').toBeTruthy()
     })
@@ -26,8 +30,8 @@ describe("fizzbuzz", () => {
         [5, 'Buzz.',],
         [30, 'FizzBuzz.'],
         [33, 'Fizz'],
+        [60, 'FizzBuzz.'],
         [100, 'Buzz.',],
-        [330, 'FizzBuzz.'],
       ])(`given %i returns "%s"`, (value, expected) => {
         expect(fizzbuzz(value)).toBe(expected);
       });

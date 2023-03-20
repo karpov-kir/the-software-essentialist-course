@@ -11,6 +11,10 @@ export const fizzbuzz = (value: number) => {
         throw new Error('Value is too small')
     }
 
+    if (value > 100) {
+        throw new Error('Value is too big')
+    }
+
     if (isMultiplierOf(3, value) && isMultiplierOf(5, value)) {
         return "FizzBuzz."
     }
