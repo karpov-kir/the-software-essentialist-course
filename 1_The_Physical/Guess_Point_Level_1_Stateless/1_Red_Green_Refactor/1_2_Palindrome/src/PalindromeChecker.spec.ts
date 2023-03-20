@@ -1,4 +1,4 @@
-import { PalindromeChecker } from './';
+import { PalindromeChecker } from './PalindromeChecker';
 
 const palindromeChecker = new PalindromeChecker();
 
