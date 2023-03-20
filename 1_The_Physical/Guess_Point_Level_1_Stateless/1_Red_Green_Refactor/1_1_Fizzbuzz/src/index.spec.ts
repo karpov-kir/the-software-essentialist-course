@@ -1,6 +1,10 @@
 import { fizzbuzz } from './fizzbuzz';
 
 describe("fizzbuzz", () => {
+    it('throws an error for numbers less than 1 such as 0', () => {
+        expect(() => fizzbuzz(0)).toThrow()
+    })
+
     it('returns a number such as 10 as a string', () => {
         expect(typeof fizzbuzz(10) === 'string').toBeTruthy()
     })
