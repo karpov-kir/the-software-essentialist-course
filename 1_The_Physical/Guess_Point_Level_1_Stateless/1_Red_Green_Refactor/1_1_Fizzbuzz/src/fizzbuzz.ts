@@ -7,17 +7,21 @@
  * - takes numbers from 1 to 100
  */
 export const fizzbuzz = (value: number) => {
-    if (value % 3 === 0 && value % 5 === 0) {
+    if (isMultiplierOf(3, value) && isMultiplierOf(5, value)) {
         return "FizzBuzz."
     }
 
-    if (value % 3 === 0) {
+    if (isMultiplierOf(3, value)) {
         return "Fizz"
     }
 
-    if (value % 5 === 0) {
+    if (isMultiplierOf(5, value)) {
         return "Buzz."
     }
 
     return value.toString();
+}
+
+export const isMultiplierOf = (multiplier: number, value: number) => {
+    return value % multiplier === 0
 }
