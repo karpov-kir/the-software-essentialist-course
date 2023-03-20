@@ -11,5 +11,9 @@ export const fizzbuzz = (value: number) => {
         return "Fizz"
     }
 
+    if (value % 5 === 0) {
+        return "Buzz."
+    }
+
     return value.toString();
 }
