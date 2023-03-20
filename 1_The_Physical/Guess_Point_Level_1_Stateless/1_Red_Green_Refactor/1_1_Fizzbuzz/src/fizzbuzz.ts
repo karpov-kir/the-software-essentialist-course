@@ -7,6 +7,10 @@
  * - takes numbers from 1 to 100
  */
 export const fizzbuzz = (value: number) => {
+    if (value % 3 === 0 && value % 5 === 0) {
+        return "FizzBuzz."
+    }
+
     if (value % 3 === 0) {
         return "Fizz"
     }
