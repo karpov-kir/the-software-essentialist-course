@@ -19,6 +19,10 @@ describe(PalindromeChecker, () => {
     expect(palindromeChecker.isPalindrome('Was It A Rat I Saw')).toBe(true);
   });
 
+  it('tells that a phrase is not a palindrome such as "I am not a palindrome"', () => {
+    expect(palindromeChecker.isPalindrome('I am not a palindrome')).toBe(false);
+  });
+
   it('tells that an empty string is a palindrome', () => {
     expect(palindromeChecker.isPalindrome('')).toBe(true);
   });
