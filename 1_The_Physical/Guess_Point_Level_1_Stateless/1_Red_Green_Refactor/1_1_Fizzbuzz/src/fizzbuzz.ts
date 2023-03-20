@@ -15,21 +15,21 @@ export const fizzbuzz = (value: number) => {
         throw new Error('Value is too big')
     }
 
-    if (isMultiplierOf(3, value) && isMultiplierOf(5, value)) {
+    if (isMultipleOf(value, 3) && isMultipleOf(value, 5)) {
         return "FizzBuzz."
     }
 
-    if (isMultiplierOf(3, value)) {
+    if (isMultipleOf(value, 3)) {
         return "Fizz"
     }
 
-    if (isMultiplierOf(5, value)) {
+    if (isMultipleOf(value, 5)) {
         return "Buzz."
     }
 
     return value.toString();
 }
 
-export const isMultiplierOf = (multiplier: number, value: number) => {
-    return value % multiplier === 0
+export const isMultipleOf = (value: number, devisor: number) => {
+    return value % devisor === 0
 }
