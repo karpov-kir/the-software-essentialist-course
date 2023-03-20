@@ -6,6 +6,6 @@
  */
 export class PalindromeChecker {
   isPalindrome(value: string) {
-    return value === value.split('').reverse().join('');
+    return value.toLocaleLowerCase() === value.toLocaleLowerCase().split('').reverse().join('');
   }
 }

@@ -10,4 +10,8 @@ describe(PalindromeChecker, () => {
   it('tells that "bills" is not a palindrome', () => {
     expect(palindromeChecker.isPalindrome('bills')).toBe(false);
   });
+
+  it('tells that "Mom" is a palindrome', () => {
+    expect(palindromeChecker.isPalindrome('Mom')).toBe(true);
+  });
 });
