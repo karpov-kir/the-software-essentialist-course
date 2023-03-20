@@ -16,4 +16,15 @@ describe("fizzbuzz", () => {
     it('returns "FizzBuzz." for multiples of both 3 and 5 such as 15', () => {
         expect(fizzbuzz(15)).toBe("FizzBuzz.")
     })
+
+    test.each([
+        [3, 'Fizz'],
+        [5, 'Buzz.',],
+        [30, 'FizzBuzz.'],
+        [33, 'Fizz'],
+        [100, 'Buzz.',],
+        [330, 'FizzBuzz.'],
+      ])(`given %i returns "%s"`, (value, expected) => {
+        expect(fizzbuzz(value)).toBe(expected);
+      });
 });
