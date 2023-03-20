@@ -28,8 +28,10 @@ describe("fizzbuzz", () => {
     test.each([
         [3, 'Fizz'],
         [5, 'Buzz.',],
+        [19, '19'],
         [30, 'FizzBuzz.'],
         [33, 'Fizz'],
+        [43, '43'],
         [60, 'FizzBuzz.'],
         [100, 'Buzz.',],
       ])(`given %i returns "%s"`, (value, expected) => {
