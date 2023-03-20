@@ -7,6 +7,9 @@
  */
 export class PalindromeChecker {
   isPalindrome(value: string) {
-    return value.toLocaleLowerCase() === value.toLocaleLowerCase().split('').reverse().join('');
+    return (
+      value.replace(/ /g, '').toLocaleLowerCase() ===
+      value.replace(/ /g, '').toLocaleLowerCase().split('').reverse().join('')
+    );
   }
 }
