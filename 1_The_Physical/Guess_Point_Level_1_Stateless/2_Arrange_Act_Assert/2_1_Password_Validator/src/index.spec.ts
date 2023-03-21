@@ -2,7 +2,7 @@ import { PasswordValidator, ValidationResult } from './';
 
 const passwordValidator = new PasswordValidator();
 
-describe('password validator', () => {
+describe(PasswordValidator, () => {
   it('accepts a valid password', () => {
     const result = passwordValidator.validate('Mypassword1');
 
