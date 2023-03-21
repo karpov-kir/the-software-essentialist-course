@@ -11,4 +11,13 @@ describe('password validator', () => {
       isValid: false,
     });
   });
+
+  it('rejects a too long password', () => {
+    const result = passwordValidator.validate('1'.repeat(16));
+
+    expect(result).toEqual({
+      errors: ['Password is too long'],
+      isValid: false,
+    });
+  });
 });
