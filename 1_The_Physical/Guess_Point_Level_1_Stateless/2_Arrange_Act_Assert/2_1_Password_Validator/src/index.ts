@@ -1,34 +1,27 @@
-interface ValidationResult {
+export interface ValidationResult {
   errors: string[];
   isValid: boolean;
 }
 
 export class PasswordValidator {
   validate(password: string): ValidationResult {
+    const errors: string[] = [];
+
     if (password.length < 5) {
-      return {
-        errors: ['Password is too short'],
-        isValid: false,
-      };
+      errors.push('Password is too short');
     }
 
     if (password.length > 15) {
-      return {
-        errors: ['Password is too long'],
-        isValid: false,
-      };
+      errors.push('Password is too long');
     }
 
     if (!/[A-Z]/.test(password)) {
-      return {
-        errors: ['Password must contain at least one upper case letter'],
-        isValid: false,
-      };
+      errors.push('Password must contain at least one upper case letter');
     }
 
     return {
-      errors: [],
-      isValid: true,
+      errors,
+      isValid: !errors.length,
     };
   }
 }
