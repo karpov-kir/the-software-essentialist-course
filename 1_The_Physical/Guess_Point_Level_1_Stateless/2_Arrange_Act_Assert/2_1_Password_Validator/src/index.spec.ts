@@ -3,35 +3,37 @@ import { PasswordValidator, ValidationResult } from './';
 const passwordValidator = new PasswordValidator();
 
 describe('password validator', () => {
-  it('rejects a too short password', () => {
-    const result = passwordValidator.validate('1');
+  describe('invalid password', () => {
+    it('rejects a too short password', () => {
+      const result = passwordValidator.validate('1');
 
-    assertValidationResultError(result, 'Password is too short');
-  });
+      assertValidationResultError(result, 'Password is too short');
+    });
 
-  it('rejects a too long password', () => {
-    const result = passwordValidator.validate('1'.repeat(16));
+    it('rejects a too long password', () => {
+      const result = passwordValidator.validate('1'.repeat(16));
 
-    assertValidationResultError(result, 'Password is too long');
-  });
+      assertValidationResultError(result, 'Password is too long');
+    });
 
-  it('rejects a password that does not contain at least one upper case letter', () => {
-    const result = passwordValidator.validate('my-password');
+    it('rejects a password that does not contain at least one upper case letter', () => {
+      const result = passwordValidator.validate('my-password');
 
-    assertValidationResultError(result, 'Password must contain at least one upper case letter');
-  });
+      assertValidationResultError(result, 'Password must contain at least one upper case letter');
+    });
 
-  it('rejects a password that does not contain at least one digit', () => {
-    const result = passwordValidator.validate('my-password');
+    it('rejects a password that does not contain at least one digit', () => {
+      const result = passwordValidator.validate('my-password');
 
-    assertValidationResultError(result, 'Password must contain at least one digit');
-  });
+      assertValidationResultError(result, 'Password must contain at least one digit');
+    });
 
-  it('rejects a password with both no digit and no upper case errors', () => {
-    const result = passwordValidator.validate('my-password');
+    it('rejects a password with both no digit and no upper case errors', () => {
+      const result = passwordValidator.validate('my-password');
 
-    assertValidationResultError(result, 'Password must contain at least one digit');
-    assertValidationResultError(result, 'Password must contain at least one upper case letter');
+      assertValidationResultError(result, 'Password must contain at least one digit');
+      assertValidationResultError(result, 'Password must contain at least one upper case letter');
+    });
   });
 });
 
