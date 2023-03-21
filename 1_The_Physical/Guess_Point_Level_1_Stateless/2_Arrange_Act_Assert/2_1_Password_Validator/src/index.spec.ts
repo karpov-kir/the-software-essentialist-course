@@ -20,4 +20,13 @@ describe('password validator', () => {
       isValid: false,
     });
   });
+
+  it('rejects a password that does not contain at least one upper case letter', () => {
+    const result = passwordValidator.validate('my-password');
+
+    expect(result).toEqual({
+      errors: ['Password must contain at least one upper case letter'],
+      isValid: false,
+    });
+  });
 });
