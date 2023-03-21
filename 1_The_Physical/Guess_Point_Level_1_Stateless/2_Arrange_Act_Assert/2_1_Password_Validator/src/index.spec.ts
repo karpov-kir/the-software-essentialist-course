@@ -3,6 +3,15 @@ import { PasswordValidator, ValidationResult } from './';
 const passwordValidator = new PasswordValidator();
 
 describe('password validator', () => {
+  it('accepts a valid password', () => {
+    const result = passwordValidator.validate('Mypassword1');
+
+    expect(result).toEqual({
+      errors: [],
+      isValid: true,
+    });
+  });
+
   describe('invalid password', () => {
     it('rejects a too short password', () => {
       const result = passwordValidator.validate('1');
