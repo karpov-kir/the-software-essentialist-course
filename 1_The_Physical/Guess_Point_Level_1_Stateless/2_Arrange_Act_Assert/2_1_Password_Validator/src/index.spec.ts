@@ -20,6 +20,12 @@ describe('password validator', () => {
 
     assertValidationResultError(result, 'Password must contain at least one upper case letter');
   });
+
+  it('rejects a password that does not contain at least one digit', () => {
+    const result = passwordValidator.validate('my-password');
+
+    assertValidationResultError(result, 'Password must contain at least one digit');
+  });
 });
 
 const assertValidationResultError = (result: ValidationResult, error: string) => {
