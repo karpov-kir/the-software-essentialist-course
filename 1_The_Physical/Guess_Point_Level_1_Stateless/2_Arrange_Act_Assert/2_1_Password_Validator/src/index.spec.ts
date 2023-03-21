@@ -14,7 +14,7 @@ describe(PasswordValidator, () => {
 
   describe('invalid password', () => {
     it('rejects a too short password', () => {
-      const result = passwordValidator.validate('1');
+      const result = passwordValidator.validate('1'.repeat(4));
 
       assertValidationResultError(result, 'Password is too short');
     });
