@@ -6,7 +6,7 @@ import { createStringIterator, StringIteratorValue } from './stringIterator';
  * - Tells if a phrase is a palindrome
  * - Case insensitive
  * - Space insensitive
- * - Rather strictly complexity O(N)
+ * - Rather strict complexity O(N)
  */
 export class PalindromeChecker {
   isPalindrome(value: string) {
