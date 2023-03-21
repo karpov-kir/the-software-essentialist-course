@@ -1,27 +1,27 @@
+import {
+  applyRules,
+  atLeast5Characters,
+  atLeastOneDigit,
+  atLeastOneUpperCaseLetter,
+  noMoreThat15Characters,
+  ValidationRule,
+} from './rules';
+
 export interface ValidationResult {
   errors: string[];
   isValid: boolean;
 }
 
 export class PasswordValidator {
+  private static rules: ValidationRule[] = [
+    [atLeast5Characters, 'Password is too short'],
+    [noMoreThat15Characters, 'Password is too long'],
+    [atLeastOneUpperCaseLetter, 'Password must contain at least one upper case letter'],
+    [atLeastOneDigit, 'Password must contain at least one digit'],
+  ];
+
   validate(password: string): ValidationResult {
-    const errors: string[] = [];
-
-    if (password.length < 5) {
-      errors.push('Password is too short');
-    }
-
-    if (password.length > 15) {
-      errors.push('Password is too long');
-    }
-
-    if (!/[A-Z]/.test(password)) {
-      errors.push('Password must contain at least one upper case letter');
-    }
-
-    if (!/[0-9]/.test(password)) {
-      errors.push('Password must contain at least one digit');
-    }
+    const errors = applyRules(password, PasswordValidator.rules);
 
     return {
       errors,
