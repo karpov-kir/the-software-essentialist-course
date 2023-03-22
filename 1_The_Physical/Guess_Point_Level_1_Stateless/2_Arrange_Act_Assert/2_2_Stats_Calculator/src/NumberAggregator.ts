@@ -1,4 +1,4 @@
-abstract class NumberAggregator {
+export abstract class NumberAggregator {
   #value = 0;
 
   get value() {
@@ -9,10 +9,10 @@ abstract class NumberAggregator {
     this.#value = value;
   }
 
-  protected abstract calculateNewAggregateValue(valueToApply: number): number;
+  protected abstract calculateNewAggregateValue(valueToProcess: number): number;
 
-  aggregate(newValue: number) {
-    this.#value = this.calculateNewAggregateValue(newValue);
+  process(valueToProcess: number) {
+    this.#value = this.calculateNewAggregateValue(valueToProcess);
   }
 }
 
@@ -22,9 +22,9 @@ export class MinValueAggregator extends NumberAggregator {
     this.value = Infinity;
   }
 
-  protected calculateNewAggregateValue(valueToApply: number) {
-    if (valueToApply < this.value) {
-      return valueToApply;
+  protected calculateNewAggregateValue(valueToProcess: number) {
+    if (valueToProcess < this.value) {
+      return valueToProcess;
     }
 
     return this.value;
@@ -37,9 +37,9 @@ export class MaxValueAggregator extends NumberAggregator {
     this.value = -Infinity;
   }
 
-  protected calculateNewAggregateValue(valueToApply: number) {
-    if (valueToApply > this.value) {
-      return valueToApply;
+  protected calculateNewAggregateValue(valueToProcess: number) {
+    if (valueToProcess > this.value) {
+      return valueToProcess;
     }
 
     return this.value;
@@ -54,14 +54,10 @@ export class AverageValueAggregator extends NumberAggregator {
     return this.#numberOfElements;
   }
 
-  get value() {
-    return this.#sum / this.#numberOfElements;
-  }
-
-  protected calculateNewAggregateValue(valueToApply: number) {
+  protected calculateNewAggregateValue(valueToProcess: number) {
     this.#numberOfElements++;
-    this.#sum += valueToApply;
+    this.#sum += valueToProcess;
 
-    return this.value;
+    return this.#sum / this.#numberOfElements;
   }
 }

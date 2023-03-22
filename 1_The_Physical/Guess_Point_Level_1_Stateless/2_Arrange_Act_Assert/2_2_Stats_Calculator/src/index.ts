@@ -1,3 +1,5 @@
+import { AverageValueAggregator, MinValueAggregator, MaxValueAggregator } from './NumberAggregator';
+
 interface Stats {
   min: number;
   max: number;
@@ -9,27 +11,21 @@ type NonEmptySequence = [number, ...number[]];
 
 export class StatsCalculator {
   calculate(sequence: NonEmptySequence): Stats {
-    let min = Infinity;
-    let max = -Infinity;
-    let sum = 0;
+    const aggregators = [new MinValueAggregator(), new MaxValueAggregator(), new AverageValueAggregator()] as const;
 
     sequence.forEach((value) => {
-      if (value < min) {
-        min = value;
-      }
-
-      if (value > max) {
-        max = value;
-      }
-
-      sum += value;
+      aggregators.forEach((aggregator) => {
+        aggregator.process(value);
+      });
     });
+
+    const [{ value: min }, { value: max }, { value: average, numberOfElements }] = aggregators;
 
     return {
       min,
       max,
-      numberOfElements: sequence.length,
-      average: sum / sequence.length,
+      numberOfElements,
+      average,
     };
   }
 }
