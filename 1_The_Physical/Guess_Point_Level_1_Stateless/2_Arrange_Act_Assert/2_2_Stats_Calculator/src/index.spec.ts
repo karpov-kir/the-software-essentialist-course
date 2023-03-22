@@ -26,4 +26,9 @@ describe(StatsCalculator, () => {
 
     expect(stats).toEqual(expect.objectContaining({ average: 4 }));
   });
+
+  it('does not accept an empty sequence', () => {
+    // @ts-expect-error cannot accept empty sequence
+    statsCalculator.calculate([]);
+  });
 });
