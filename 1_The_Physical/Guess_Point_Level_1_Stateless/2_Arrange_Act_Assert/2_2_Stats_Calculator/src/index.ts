@@ -5,8 +5,10 @@ interface Stats {
   average: number;
 }
 
+type NonEmptySequence = [number, ...number[]];
+
 export class StatsCalculator {
-  calculate(sequence: number[]): Stats {
+  calculate(sequence: NonEmptySequence): Stats {
     let min = Infinity;
     let max = -Infinity;
     let sum = 0;
