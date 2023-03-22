@@ -20,4 +20,10 @@ describe(StatsCalculator, () => {
 
     expect(stats).toEqual(expect.objectContaining({ numberOfElements: 3 }));
   });
+
+  it('calculates the average value', () => {
+    const stats = statsCalculator.calculate([2, 8, 2]);
+
+    expect(stats).toEqual(expect.objectContaining({ average: 4 }));
+  });
 });
