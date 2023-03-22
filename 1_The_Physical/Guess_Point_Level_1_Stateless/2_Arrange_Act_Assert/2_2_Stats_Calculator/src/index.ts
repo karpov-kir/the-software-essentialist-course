@@ -1,5 +1,11 @@
+interface Stats {
+  min: number;
+  max: number;
+  numberOfElements: number;
+}
+
 export class StatsCalculator {
-  calculate(sequence: number[]) {
+  calculate(sequence: number[]): Stats {
     let min = Infinity;
     let max = -Infinity;
 
