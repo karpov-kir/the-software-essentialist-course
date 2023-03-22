@@ -16,6 +16,7 @@ export class StatsCalculator {
     return {
       min,
       max,
+      numberOfElements: sequence.length,
     };
   }
 }

@@ -14,4 +14,10 @@ describe(StatsCalculator, () => {
 
     expect(stats).toEqual(expect.objectContaining({ max: 3 }));
   });
+
+  it('counts numbers of elements', () => {
+    const stats = statsCalculator.calculate([1, 2, 3]);
+
+    expect(stats).toEqual(expect.objectContaining({ numberOfElements: 3 }));
+  });
 });
