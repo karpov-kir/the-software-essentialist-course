@@ -46,6 +46,9 @@ const parseIntStrict = (rawPart: string) => {
   return parseInt(rawPartWithoutSpaces);
 };
 
+/**
+ * It parses whatever it can parse without validation.
+ */
 export const parseTimeRange = (timeRange: string): TimeRange => {
   const start = {
     hour: NaN,
