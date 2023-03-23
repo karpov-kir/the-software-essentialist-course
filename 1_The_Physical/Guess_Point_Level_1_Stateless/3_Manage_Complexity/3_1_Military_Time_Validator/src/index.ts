@@ -2,23 +2,25 @@ export class TimeValidator {
   isValidMilitaryTimeRange(timeRange: string) {
     const { startHours, endHours } = getTimeRangeParts(timeRange);
 
-    return (
-      parseInt(startHours) <= 24 && parseInt(endHours) <= 24 && parseInt(startHours) >= 0 && parseInt(endHours) >= 0
-    );
+    return isHourValid(startHours) && isHourValid(endHours);
   }
 }
 
 const getTimeRangeParts = (timeRange: string) => {
-  const [startTime, endTime] = timeRange.split('-');
-  const [startHours, startMinutes] = startTime.split(':');
-  const [endHours, endMinutes] = endTime.split(':');
+  const [rawStartTime, rawEndTime] = timeRange.split('-');
+  const [rawStartHours, rawStartMinutes] = rawStartTime.split(':');
+  const [rawEndHours, rawEndMinutes] = rawEndTime.split(':');
 
   return {
-    startTime,
-    endTime,
-    startHours,
-    endHours,
-    startMinutes,
-    endMinutes,
+    startTime: parseFloat(rawStartTime),
+    endTime: parseFloat(rawEndTime),
+    startHours: parseFloat(rawStartHours),
+    endHours: parseFloat(rawEndHours),
+    startMinutes: parseFloat(rawStartMinutes),
+    endMinutes: parseFloat(rawEndMinutes),
   };
+};
+
+const isHourValid = (hour: number) => {
+  return Number.isFinite(hour) && hour >= 0 && hour <= 24;
 };
