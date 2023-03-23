@@ -2,7 +2,9 @@ export class TimeValidator {
   isValidMilitaryTimeRange(timeRange: string) {
     const { startHours, endHours } = getTimeRangeParts(timeRange);
 
-    return parseInt(startHours) <= 24 && parseInt(endHours) <= 24;
+    return (
+      parseInt(startHours) <= 24 && parseInt(endHours) <= 24 && parseInt(startHours) >= 0 && parseInt(endHours) >= 0
+    );
   }
 }
 
