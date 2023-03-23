@@ -20,6 +20,18 @@ export const isTimeValid = (time: Time) => {
   return isHourValid(time.hour) && isMinuteValid(time.minute);
 };
 
+export const isStartTimeLessThanEndTime = (start: Time, end: Time) => {
+  if (start.hour > end.hour) {
+    return false;
+  } else if (start.hour === end.hour) {
+    if (start.minute >= end.minute) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 export const parseTimeRange = (timeRange: string): TimeRange => {
   const [rawStartTime, rawEndTime] = timeRange.split('-');
   const [rawStartHour, rawStartMinute] = rawStartTime.split(':');
