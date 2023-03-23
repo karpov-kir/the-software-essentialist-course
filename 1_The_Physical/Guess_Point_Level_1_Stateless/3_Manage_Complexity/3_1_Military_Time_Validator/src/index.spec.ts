@@ -18,12 +18,12 @@ describe(TimeValidator, () => {
       expect(timeValidator.isValidMilitaryTimeRange('15:30 - 25:30')).toBeFalsy();
     });
 
-    it('tells that "-1:30 - 15:30" is not valid military time range', () => {
-      expect(timeValidator.isValidMilitaryTimeRange('-1:30 - 15:30')).toBeFalsy();
+    it('tells that "-13:30 - 15:30" is not valid military time range', () => {
+      expect(timeValidator.isValidMilitaryTimeRange('-13:30 - 15:30')).toBeFalsy();
     });
 
-    it('tells that "15:30 - -1:30" is not valid military time range', () => {
-      expect(timeValidator.isValidMilitaryTimeRange('15:30 - -1:30')).toBeFalsy();
+    it('tells that "15:30 - -16:30" is not valid military time range', () => {
+      expect(timeValidator.isValidMilitaryTimeRange('15:30 - -16:30')).toBeFalsy();
     });
   });
 
