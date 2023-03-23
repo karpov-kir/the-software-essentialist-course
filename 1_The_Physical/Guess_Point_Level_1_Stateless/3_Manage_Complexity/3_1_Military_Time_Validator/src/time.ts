@@ -9,11 +9,11 @@ interface TimeRange {
 }
 
 const isHourValid = (hour: number) => {
-  return Number.isFinite(hour) && hour >= 0 && hour <= 24;
+  return Number.isInteger(hour) && hour >= 0 && hour <= 24;
 };
 
 const isMinuteValid = (minute: number) => {
-  return Number.isFinite(minute) && minute >= 0 && minute <= 59;
+  return Number.isInteger(minute) && minute >= 0 && minute <= 59;
 };
 
 export const isTimeValid = (time: Time) => {
