@@ -32,20 +32,48 @@ export const isStartTimeLessThanEndTime = (start: Time, end: Time) => {
   return true;
 };
 
+/**
+ * It cuts only spaces the rest is required to be an int number otherwise NaN is returned.
+ */
+const parseIntStrict = (rawPart: string) => {
+  const rawPartWithoutSpaces = rawPart.replace(/\s/g, '');
+  const isDigit = !/^\d+$/.test(rawPartWithoutSpaces);
+
+  if (isDigit) {
+    return NaN;
+  }
+
+  return parseInt(rawPartWithoutSpaces);
+};
+
 export const parseTimeRange = (timeRange: string): TimeRange => {
+  const start = {
+    hour: NaN,
+    minute: NaN,
+  };
+  const end = {
+    hour: NaN,
+    minute: NaN,
+  };
+
+  const timeParts = timeRange.split('-');
+
+  if (timeParts.length !== 2) {
+    return {
+      start,
+      end,
+    };
+  }
+
   const [rawStartTime, rawEndTime] = timeRange.split('-');
   const [rawStartHour, rawStartMinute] = rawStartTime.split(':');
   const [rawEndHour, rawEndMinute] = rawEndTime.split(':');
 
-  const start: Time = {
-    hour: parseFloat(rawStartHour),
-    minute: parseFloat(rawStartMinute),
-  };
+  start.hour = parseIntStrict(rawStartHour);
+  start.minute = parseIntStrict(rawStartMinute);
 
-  const end: Time = {
-    hour: parseFloat(rawEndHour),
-    minute: parseFloat(rawEndMinute),
-  };
+  end.hour = parseIntStrict(rawEndHour);
+  end.minute = parseIntStrict(rawEndMinute);
 
   return {
     start,

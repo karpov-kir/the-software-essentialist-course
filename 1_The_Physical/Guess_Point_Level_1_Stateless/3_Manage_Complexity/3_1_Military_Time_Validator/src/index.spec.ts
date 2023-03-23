@@ -14,6 +14,15 @@ describe(TimeValidator, () => {
       expect(timeValidator.isValidMilitaryTimeRange('15:30 - 15:30')).toBeFalsy();
     });
 
+    describe('invalid time because of syntax', () => {
+      it.each(['14:30 - 15:30 asd', 'asd 14:30 - 15:30', '14:30 - 15:30 -', '- 14:30 - 15:30'])(
+        'tells that "%s" is not a valid military time range',
+        (range: string) => {
+          expect(timeValidator.isValidMilitaryTimeRange(range)).toBeFalsy();
+        },
+      );
+    });
+
     describe('invalid time because of hours', () => {
       it.each([
         '25:30 - 15:30',
