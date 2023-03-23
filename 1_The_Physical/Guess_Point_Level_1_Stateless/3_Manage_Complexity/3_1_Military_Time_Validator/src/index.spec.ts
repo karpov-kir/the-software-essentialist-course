@@ -25,6 +25,10 @@ describe(TimeValidator, () => {
     it('tells that "15:30 - -16:30" is not valid military time range', () => {
       expect(timeValidator.isValidMilitaryTimeRange('15:30 - -16:30')).toBeFalsy();
     });
+
+    it('tells that "15.5:30 - -16:30" is not valid military time range', () => {
+      expect(timeValidator.isValidMilitaryTimeRange('15.5:30 - -16:30')).toBeFalsy();
+    });
   });
 
   describe('invalid time because of minutes', () => {
@@ -42,6 +46,10 @@ describe(TimeValidator, () => {
 
     it('tells that "13:30 - 15:60" is not valid military time range', () => {
       expect(timeValidator.isValidMilitaryTimeRange('13:30 - -15:60')).toBeFalsy();
+    });
+
+    it('tells that "13:3.5 - 15:60" is not valid military time range', () => {
+      expect(timeValidator.isValidMilitaryTimeRange('13:3.5 - 15:60')).toBeFalsy();
     });
   });
 });
