@@ -3,39 +3,33 @@ import { BooleanCalculator } from './';
 const booleanCalculator = new BooleanCalculator();
 
 describe(BooleanCalculator, () => {
-  it('tells that "TRUE" is truthy', () => {
-    expect(booleanCalculator.isTruthy('TRUE')).toBeTruthy();
+  describe('truthy', () => {
+    it.each(['TRUE', 'TRUE AND TRUE', 'FALSE OR TRUE'])('tells that "%s" is truthy', (booleanExpression) => {
+      expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
+    });
   });
 
-  it('tells that "FALSE" is falsy', () => {
-    expect(booleanCalculator.isTruthy('FALSE')).toBeFalsy();
+  describe('falsy', () => {
+    it.each(['FALSE', 'TRUE AND FALSE', 'FALSE OR TRUE AND FALSE'])('tells that "%s" is falsy', (booleanExpression) => {
+      expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
+    });
   });
 
-  it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
-    expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError('Unexpected token "UNEXPECTED"');
-  });
+  describe('unexpected input error', () => {
+    it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
+      expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError('Unexpected token "UNEXPECTED"');
+    });
 
-  it('tells that "TRUE AND FALSE" is falsy', () => {
-    expect(booleanCalculator.isTruthy('TRUE AND FALSE')).toBeFalsy();
-  });
+    it('rejects "FALSE OR AND FALSE" with an unexpected token error', () => {
+      expect(() => booleanCalculator.isTruthy('FALSE OR AND FALSE')).toThrowError(
+        'Expect a boolean token but go "AND"',
+      );
+    });
 
-  it('tells that "TRUE AND TRUE" is truthy', () => {
-    expect(booleanCalculator.isTruthy('TRUE AND TRUE')).toBeTruthy();
-  });
-
-  it('tells that "FALSE OR TRUE" is truthy', () => {
-    expect(booleanCalculator.isTruthy('FALSE OR TRUE')).toBeTruthy();
-  });
-
-  it('tells that "FALSE OR TRUE AND FALSE" is falsy', () => {
-    expect(booleanCalculator.isTruthy('FALSE OR TRUE AND FALSE')).toBeFalsy();
-  });
-
-  it('rejects "FALSE OR AND FALSE" with an unexpected token error', () => {
-    expect(() => booleanCalculator.isTruthy('FALSE OR AND FALSE')).toThrowError('Expect a boolean token but go "AND"');
-  });
-
-  it('rejects "TRUE AND TRUE FALSE" rejects with an unexpected token error', () => {
-    expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError('Expect a logic token but go "FALSE"');
+    it('rejects "TRUE AND TRUE FALSE" rejects with an unexpected token error', () => {
+      expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError(
+        'Expect a logic token but go "FALSE"',
+      );
+    });
   });
 });
