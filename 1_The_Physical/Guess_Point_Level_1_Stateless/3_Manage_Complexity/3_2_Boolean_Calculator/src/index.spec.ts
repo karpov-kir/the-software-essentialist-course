@@ -1,4 +1,9 @@
+import { BooleanCalculator } from './';
 
-describe('boolean calculator', () => {
+const booleanCalculator = new BooleanCalculator();
 
-})
+describe(BooleanCalculator, () => {
+  it('tells that "TRUE" is truthy', () => {
+    expect(booleanCalculator.isTruthy('TRUE')).toBeTruthy();
+  });
+});
