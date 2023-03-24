@@ -1,5 +1,5 @@
 export class BooleanCalculator {
   isTruthy(booleanExpression: string) {
-    return true;
+    return booleanExpression === 'TRUE';
   }
 }
