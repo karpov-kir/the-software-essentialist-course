@@ -1,10 +1,12 @@
 const allowedBooleanTokens = ['TRUE', 'FALSE'];
-const allowedLogicTokens = ['AND', 'OR'];
-const allowedTokens = [...allowedBooleanTokens, ...allowedLogicTokens];
+const allowedLogicTokens = ['AND', 'OR', 'NOT'];
+const negationToken = 'NOT';
+const allowedTokens = [...allowedBooleanTokens, ...allowedLogicTokens, negationToken];
 
 enum ParsingState {
   ExpectingBoolean,
   ExpectingLogic,
+  ExpectingNegation,
 }
 
 export class BooleanCalculator {
@@ -17,34 +19,80 @@ export class BooleanCalculator {
       }
     });
 
-    let parsingState = ParsingState.ExpectingBoolean;
+    let parsingState = [ParsingState.ExpectingBoolean, ParsingState.ExpectingNegation];
     let state: boolean | undefined;
     let logic: string | undefined;
+    let isNegated = false;
 
     tokens.forEach((token) => {
-      if (parsingState === ParsingState.ExpectingBoolean) {
-        if (!allowedBooleanTokens.includes(token)) {
-          throw new Error(`Expect a boolean token but go "${token}"`);
+      if (
+        parsingState.includes(ParsingState.ExpectingBoolean) &&
+        parsingState.includes(ParsingState.ExpectingNegation)
+      ) {
+        const isBooleanToken = allowedBooleanTokens.includes(token);
+        const isNegationToken = token === negationToken;
+
+        if (!isBooleanToken && !isNegationToken) {
+          throw new Error(`Expect a boolean or negation token but got "${token}"`);
+        }
+
+        if (isBooleanToken) {
+          let tokenState = token === 'TRUE';
+
+          if (isNegated) {
+            tokenState = !tokenState;
+            isNegated = false;
+          }
+
+          if (state === undefined) {
+            state = tokenState;
+          } else {
+            if (logic === 'AND') {
+              state = state && tokenState;
+            } else {
+              state = state || tokenState;
+            }
+          }
+
+          parsingState = [ParsingState.ExpectingLogic];
+        } else {
+          parsingState = [ParsingState.ExpectingBoolean];
+          isNegated = true;
+        }
+      } else if (parsingState.includes(ParsingState.ExpectingBoolean)) {
+        const isBooleanToken = allowedBooleanTokens.includes(token);
+
+        if (!isBooleanToken) {
+          throw new Error(`Expect a boolean token but got "${token}"`);
+        }
+
+        let tokenState = token === 'TRUE';
+
+        if (isNegated) {
+          tokenState = !tokenState;
+          isNegated = false;
         }
 
         if (state === undefined) {
-          state = token === 'TRUE';
+          state = tokenState;
         } else {
           if (logic === 'AND') {
-            state = state && token === 'TRUE';
+            state = state && tokenState;
           } else {
-            state = state || token === 'TRUE';
+            state = state || tokenState;
           }
         }
 
-        parsingState = ParsingState.ExpectingLogic;
-      } else if (parsingState === ParsingState.ExpectingLogic) {
-        if (!allowedLogicTokens.includes(token)) {
-          throw new Error(`Expect a logic token but go "${token}"`);
+        parsingState = [ParsingState.ExpectingLogic];
+      } else if (parsingState.includes(ParsingState.ExpectingLogic)) {
+        const isLogicToken = allowedLogicTokens.includes(token);
+
+        if (!isLogicToken) {
+          throw new Error(`Expect a logic token but got "${token}"`);
         }
 
         logic = token;
-        parsingState = ParsingState.ExpectingBoolean;
+        parsingState = [ParsingState.ExpectingBoolean, ParsingState.ExpectingNegation];
       }
     });
 
