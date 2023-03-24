@@ -14,4 +14,8 @@ describe(BooleanCalculator, () => {
   it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
     expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError('Unexpected token "UNEXPECTED"');
   });
+
+  it('tells that "TRUE AND FALSE" is falsy', () => {
+    expect(booleanCalculator.isTruthy('TRUE AND FALSE')).toBeFalsy();
+  });
 });
