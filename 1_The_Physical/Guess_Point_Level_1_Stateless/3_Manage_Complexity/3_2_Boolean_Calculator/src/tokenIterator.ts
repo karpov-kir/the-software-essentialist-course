@@ -38,19 +38,20 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
         const isEnd = position === l - 1;
         const isCurrentGroupToken = isGroupToken(character);
         const isNextGroupToken = isGroupToken(booleanExpression[position + 1]);
-        const isTokenComplete = isSpace || isEnd || isCurrentGroupToken || isNextGroupToken;
+        const maybeTokenBoundary = isSpace || isEnd || isCurrentGroupToken || isNextGroupToken;
 
         if (!isSpace) {
           currentToken += character;
         }
 
-        if (isTokenComplete) {
+        if (maybeTokenBoundary && currentToken) {
           if (isCurrentGroupToken || isNextGroupToken) {
             position++;
           }
 
-          position += geSpaceCountStartingFrom(position);
-          const newIsEnd = position === l - 1;
+          const spacesAfterToken = geSpaceCountStartingFrom(position);
+          position += spacesAfterToken;
+          const newIsEnd = position >= l - 1;
 
           return {
             value: {

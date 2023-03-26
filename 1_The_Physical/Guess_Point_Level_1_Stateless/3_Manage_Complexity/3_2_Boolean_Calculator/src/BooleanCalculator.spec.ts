@@ -20,6 +20,19 @@ describe(BooleanCalculator, () => {
     ])('tells that "%s" is truthy', (booleanExpression) => {
       expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
     });
+
+    describe('space insensitive', () => {
+      it.each([
+        ' TRUE  ',
+        'TRUE    AND   TRUE',
+        '(  (FALSE OR TRUE   ) AND   (FALSE OR TRUE))   ',
+        '   ((  FALSE OR (  FALSE OR TRUE)   ) AND (FALSE OR TRUE))',
+        '(  TRUE  )',
+        '  (NOT FALSE)  ',
+      ])('tells that "%s" is truthy', (booleanExpression) => {
+        expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
+      });
+    });
   });
 
   describe('falsy', () => {
@@ -37,6 +50,19 @@ describe(BooleanCalculator, () => {
       '((FALSE OR (FALSE OR TRUE)) AND (FALSE OR (FALSE AND NOT TRUE)))',
     ])('tells that "%s" is falsy', (booleanExpression) => {
       expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
+    });
+
+    describe('space insensitive', () => {
+      it.each([
+        ' FALSE  ',
+        'TRUE    AND   FALSE',
+        '(  (FALSE OR TRUE   ) AND   FALSE  )   ',
+        '   ((  FALSE OR (  FALSE OR TRUE)   ) AND (FALSE OR (FALSE))',
+        '(  FALSE  )',
+        '  (NOT TRUE)  ',
+      ])('tells that "%s" is truthy', (booleanExpression) => {
+        expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
+      });
     });
   });
 
