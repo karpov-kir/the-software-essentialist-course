@@ -1,4 +1,4 @@
-import { BooleanCalculator } from './';
+import { BooleanCalculator } from './BooleanCalculator';
 
 const booleanCalculator = new BooleanCalculator();
 
