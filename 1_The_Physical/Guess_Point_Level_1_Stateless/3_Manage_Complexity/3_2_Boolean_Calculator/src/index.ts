@@ -4,19 +4,93 @@ const negationToken = 'NOT';
 
 enum TokenType {
   Boolean = 'Boolean',
+  // AND, OR
   Logic = 'Logic',
   Negation = 'Not',
   Unknown = 'Unknown',
 }
+
+interface Context {
+  shouldNegate: boolean;
+  state:
+    | boolean
+    // Beginning state
+    | undefined;
+  logic: 'AND' | 'OR' | undefined;
+}
+
+type Action = {
+  tokenType: TokenType;
+  token: string;
+};
+
+type TokenHandler = (
+  context: Context,
+  action: Action,
+) => {
+  context: Context;
+  nextAllowedTokenTypes: TokenType[];
+};
+
+const handlers: Record<string, TokenHandler> = {
+  [TokenType.Boolean]: (context, action) => {
+    const newContext = { ...context };
+    let tokenState = action.token === 'TRUE';
+
+    if (newContext.shouldNegate) {
+      tokenState = !tokenState;
+      newContext.shouldNegate = false;
+    }
+
+    if (newContext.state === undefined) {
+      newContext.state = tokenState;
+    } else if (context.logic === 'AND') {
+      newContext.state = newContext.state && tokenState;
+    } else {
+      newContext.state = newContext.state || tokenState;
+    }
+
+    newContext.shouldNegate = false;
+    newContext.logic = undefined;
+
+    return {
+      context: newContext,
+      nextAllowedTokenTypes: [TokenType.Logic],
+    };
+  },
+  [TokenType.Negation]: (context, _action) => {
+    const newContext = { ...context };
+
+    newContext.shouldNegate = true;
+
+    return {
+      context: newContext,
+      nextAllowedTokenTypes: [TokenType.Boolean],
+    };
+  },
+  [TokenType.Logic]: (context, action) => {
+    const newContext = { ...context };
+
+    // TODO get rid of type casting?
+    newContext.logic = action.token as 'AND' | 'OR';
+
+    return {
+      context: newContext,
+      nextAllowedTokenTypes: [TokenType.Boolean, TokenType.Negation],
+    };
+  },
+};
 
 export class BooleanCalculator {
   isTruthy(booleanExpression: string) {
     const tokens = booleanExpression.split(' ');
 
     let nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation];
-    let state: boolean | undefined;
-    let logic: string | undefined;
-    let isNegated = false;
+    let context: Context = {
+      shouldNegate: false,
+      logic: undefined,
+      state: undefined,
+    };
 
     tokens.forEach((token) => {
       const tokenType = getTokenType(token);
@@ -25,52 +99,13 @@ export class BooleanCalculator {
         throw new Error(`Expected a token of type "${nextAllowedTokenTypes.join('" or "')}" but got "${token}"`);
       }
 
-      if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Boolean, TokenType.Negation])) {
-        if (tokenType === TokenType.Boolean) {
-          let tokenState = token === 'TRUE';
+      const handler = handlers[tokenType];
+      const action = { tokenType, token };
 
-          if (isNegated) {
-            tokenState = !tokenState;
-            isNegated = false;
-          }
-
-          if (state === undefined) {
-            state = tokenState;
-          } else if (logic === 'AND') {
-            state = state && tokenState;
-          } else {
-            state = state || tokenState;
-          }
-
-          nextAllowedTokenTypes = [TokenType.Logic];
-        } else {
-          nextAllowedTokenTypes = [TokenType.Boolean];
-          isNegated = true;
-        }
-      } else if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Boolean])) {
-        let tokenState = token === 'TRUE';
-
-        if (isNegated) {
-          tokenState = !tokenState;
-          isNegated = false;
-        }
-
-        if (state === undefined) {
-          state = tokenState;
-        } else if (logic === 'AND') {
-          state = state && tokenState;
-        } else {
-          state = state || tokenState;
-        }
-
-        nextAllowedTokenTypes = [TokenType.Logic];
-      } else if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Logic])) {
-        logic = token;
-        nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation];
-      }
+      ({ nextAllowedTokenTypes, context } = handler(context, action));
     });
 
-    return state;
+    return Boolean(context.state);
   }
 }
 
@@ -88,20 +123,4 @@ function getTokenType(token: string): TokenType {
   }
 
   return TokenType.Unknown;
-}
-
-function shouldHandleNext(nextAllowedTokenTypes: TokenType[], handlerOf: TokenType[]) {
-  if (handlerOf.length !== nextAllowedTokenTypes.length) {
-    return;
-  }
-
-  for (let i = 0; i < handlerOf.length; i++) {
-    const handlerToken = handlerOf[i];
-
-    if (!nextAllowedTokenTypes.includes(handlerToken)) {
-      return false;
-    }
-  }
-
-  return true;
 }
