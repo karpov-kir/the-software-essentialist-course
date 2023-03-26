@@ -1,42 +1,32 @@
-const allowedBooleanTokens = ['TRUE', 'FALSE'];
-const allowedLogicTokens = ['AND', 'OR', 'NOT'];
+const booleanTokens = ['TRUE', 'FALSE'];
+const logicTokens = ['AND', 'OR'];
 const negationToken = 'NOT';
-const allowedTokens = [...allowedBooleanTokens, ...allowedLogicTokens, negationToken];
 
-enum ParsingState {
-  ExpectingBoolean,
-  ExpectingLogic,
-  ExpectingNegation,
+enum TokenType {
+  Boolean = 'Boolean',
+  Logic = 'Logic',
+  Negation = 'Not',
+  Unknown = 'Unknown',
 }
 
 export class BooleanCalculator {
   isTruthy(booleanExpression: string) {
     const tokens = booleanExpression.split(' ');
 
-    tokens.forEach((token) => {
-      if (!allowedTokens.includes(token)) {
-        throw new Error(`Unexpected token "${token}"`);
-      }
-    });
-
-    let parsingState = [ParsingState.ExpectingBoolean, ParsingState.ExpectingNegation];
+    let nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation];
     let state: boolean | undefined;
     let logic: string | undefined;
     let isNegated = false;
 
     tokens.forEach((token) => {
-      if (
-        parsingState.includes(ParsingState.ExpectingBoolean) &&
-        parsingState.includes(ParsingState.ExpectingNegation)
-      ) {
-        const isBooleanToken = allowedBooleanTokens.includes(token);
-        const isNegationToken = token === negationToken;
+      const tokenType = getTokenType(token);
 
-        if (!isBooleanToken && !isNegationToken) {
-          throw new Error(`Expect a boolean or negation token but got "${token}"`);
-        }
+      if (!nextAllowedTokenTypes.includes(tokenType)) {
+        throw new Error(`Expected a token of type "${nextAllowedTokenTypes.join('" or "')}" but got "${token}"`);
+      }
 
-        if (isBooleanToken) {
+      if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Boolean, TokenType.Negation])) {
+        if (tokenType === TokenType.Boolean) {
           let tokenState = token === 'TRUE';
 
           if (isNegated) {
@@ -46,26 +36,18 @@ export class BooleanCalculator {
 
           if (state === undefined) {
             state = tokenState;
+          } else if (logic === 'AND') {
+            state = state && tokenState;
           } else {
-            if (logic === 'AND') {
-              state = state && tokenState;
-            } else {
-              state = state || tokenState;
-            }
+            state = state || tokenState;
           }
 
-          parsingState = [ParsingState.ExpectingLogic];
+          nextAllowedTokenTypes = [TokenType.Logic];
         } else {
-          parsingState = [ParsingState.ExpectingBoolean];
+          nextAllowedTokenTypes = [TokenType.Boolean];
           isNegated = true;
         }
-      } else if (parsingState.includes(ParsingState.ExpectingBoolean)) {
-        const isBooleanToken = allowedBooleanTokens.includes(token);
-
-        if (!isBooleanToken) {
-          throw new Error(`Expect a boolean token but got "${token}"`);
-        }
-
+      } else if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Boolean])) {
         let tokenState = token === 'TRUE';
 
         if (isNegated) {
@@ -75,27 +57,51 @@ export class BooleanCalculator {
 
         if (state === undefined) {
           state = tokenState;
+        } else if (logic === 'AND') {
+          state = state && tokenState;
         } else {
-          if (logic === 'AND') {
-            state = state && tokenState;
-          } else {
-            state = state || tokenState;
-          }
+          state = state || tokenState;
         }
 
-        parsingState = [ParsingState.ExpectingLogic];
-      } else if (parsingState.includes(ParsingState.ExpectingLogic)) {
-        const isLogicToken = allowedLogicTokens.includes(token);
-
-        if (!isLogicToken) {
-          throw new Error(`Expect a logic token but got "${token}"`);
-        }
-
+        nextAllowedTokenTypes = [TokenType.Logic];
+      } else if (shouldHandleNext(nextAllowedTokenTypes, [TokenType.Logic])) {
         logic = token;
-        parsingState = [ParsingState.ExpectingBoolean, ParsingState.ExpectingNegation];
+        nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation];
       }
     });
 
     return state;
   }
+}
+
+function getTokenType(token: string): TokenType {
+  if (booleanTokens.includes(token)) {
+    return TokenType.Boolean;
+  }
+
+  if (logicTokens.includes(token)) {
+    return TokenType.Logic;
+  }
+
+  if (token === negationToken) {
+    return TokenType.Negation;
+  }
+
+  return TokenType.Unknown;
+}
+
+function shouldHandleNext(nextAllowedTokenTypes: TokenType[], handlerOf: TokenType[]) {
+  if (handlerOf.length !== nextAllowedTokenTypes.length) {
+    return;
+  }
+
+  for (let i = 0; i < handlerOf.length; i++) {
+    const handlerToken = handlerOf[i];
+
+    if (!nextAllowedTokenTypes.includes(handlerToken)) {
+      return false;
+    }
+  }
+
+  return true;
 }

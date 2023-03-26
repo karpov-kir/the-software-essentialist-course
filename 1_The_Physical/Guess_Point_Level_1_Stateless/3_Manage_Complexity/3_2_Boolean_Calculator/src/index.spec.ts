@@ -23,28 +23,32 @@ describe(BooleanCalculator, () => {
 
   describe('unexpected input error', () => {
     it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError('Unexpected token "UNEXPECTED"');
+      expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError(
+        'Expected a token of type "Logic" but got "UNEXPECTED"',
+      );
     });
 
     it('rejects "FALSE OR AND FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('FALSE OR AND FALSE')).toThrowError(
-        'Expect a boolean or negation token but got "AND"',
+        'Expected a token of type "Boolean" or "Not" but got "AND"',
       );
     });
 
     it('rejects "FALSE OR NOT NOT FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('FALSE OR NOT NOT FALSE')).toThrowError(
-        'Expect a boolean token but got "NOT"',
+        'Expected a token of type "Boolean" but got "NOT"',
       );
     });
 
     it('rejects "NOT NOT" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('NOT NOT')).toThrowError('Expect a boolean token but got "NOT"');
+      expect(() => booleanCalculator.isTruthy('NOT NOT')).toThrowError(
+        'Expected a token of type "Boolean" but got "NOT"',
+      );
     });
 
     it('rejects "TRUE AND TRUE FALSE" rejects with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError(
-        'Expect a logic token but got "FALSE"',
+        'Expected a token of type "Logic" but got "FALSE"',
       );
     });
   });
