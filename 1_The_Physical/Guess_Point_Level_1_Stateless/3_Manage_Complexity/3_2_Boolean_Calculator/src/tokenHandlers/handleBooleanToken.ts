@@ -4,7 +4,7 @@ import { TokenHandler } from './tokenHandlers';
 export const handleBooleanToken: TokenHandler = (context, action) => {
   const nextAllowedTokens = [Token.And, Token.Or, Token.CloseGroup];
   const newContext = { ...context };
-  let tokenState = action.token === 'TRUE';
+  let tokenState = action.token === Token.True;
 
   if (newContext.shouldNegate) {
     tokenState = !tokenState;
@@ -13,7 +13,7 @@ export const handleBooleanToken: TokenHandler = (context, action) => {
 
   if (newContext.state === undefined) {
     newContext.state = tokenState;
-  } else if (context.logic === 'AND') {
+  } else if (context.logic === Token.And) {
     newContext.state = newContext.state && tokenState;
   } else {
     newContext.state = newContext.state || tokenState;
