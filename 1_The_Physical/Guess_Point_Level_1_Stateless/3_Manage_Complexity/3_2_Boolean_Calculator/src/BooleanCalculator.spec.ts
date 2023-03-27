@@ -68,7 +68,7 @@ describe(BooleanCalculator, () => {
         '   ((  FALSE OR (  FALSE OR TRUE)   ) AND (FALSE OR (FALSE))  )',
         '(  FALSE  )',
         '  (NOT TRUE)  ',
-      ])('tells that "%s" is truthy', (booleanExpression) => {
+      ])('tells that "%s" is falsy', (booleanExpression) => {
         expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
       });
     });

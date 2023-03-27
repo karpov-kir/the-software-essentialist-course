@@ -11,7 +11,7 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
     throw new Error('Boolean expression must not be empty');
   }
 
-  const geSpaceCountStartingFrom = (position: number) => {
+  const getSpaceCountStartingFrom = (position: number) => {
     let spaceCount = 0;
 
     for (let l = booleanExpression.length; position < l; position++) {
@@ -52,7 +52,7 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
 
         if (isTokenBoundary) {
           const tokenEndPosition = isSpace ? position - 1 : position;
-          const spacesAfterToken = geSpaceCountStartingFrom(isSpace ? position : position + 1);
+          const spacesAfterToken = getSpaceCountStartingFrom(isSpace ? position : position + 1);
           const positionAfterSpaces = tokenEndPosition + spacesAfterToken;
           const recalculatedIsEnd = positionAfterSpaces >= characterCount - 1;
           const nextTokenStartPosition = tokenEndPosition + spacesAfterToken + 1;
