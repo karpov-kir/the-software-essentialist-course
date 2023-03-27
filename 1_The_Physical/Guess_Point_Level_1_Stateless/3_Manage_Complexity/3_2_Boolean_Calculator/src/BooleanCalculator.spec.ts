@@ -3,6 +3,10 @@ import { BooleanCalculator } from './BooleanCalculator';
 const booleanCalculator = new BooleanCalculator();
 
 describe(BooleanCalculator, () => {
+  it('sandbox', () => {
+    expect(booleanCalculator.isTruthy('TRUE')).toBeTruthy();
+  });
+
   describe('truthy', () => {
     it.each([
       'TRUE',
@@ -31,6 +35,12 @@ describe(BooleanCalculator, () => {
         '(  TRUE  )',
         '  (NOT FALSE)  ',
       ])('tells that "%s" is truthy', (booleanExpression) => {
+        expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
+      });
+    });
+
+    describe('case insensitive', () => {
+      it.each(['FaLsE Or TrUe', 'FaLsE Or (TrUe aNd tRuE)'])('tells that "%s" is truthy', (booleanExpression) => {
         expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
       });
     });
@@ -66,48 +76,54 @@ describe(BooleanCalculator, () => {
         expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
       });
     });
+
+    describe('case insensitive', () => {
+      it.each(['TrUe AnD FaLsE', 'FaLsE Or (TrUe aNd FaLsE)'])('tells that "%s" is falsy', (booleanExpression) => {
+        expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
+      });
+    });
   });
 
   describe('unexpected input error', () => {
     it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError(
-        'Expected a token of type "Logic" or "CloseGroup" but got "UNEXPECTED"',
+        'Error at position 5-14: Unknown token "UNEXPECTED"',
       );
     });
 
     it('rejects "FALSE OR AND FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('FALSE OR AND FALSE')).toThrowError(
-        'Expected a token of type "Boolean" or "Not" or "OpenGroup" but got "AND"',
+        'Error at position 9-11: Expected "TRUE" or "FALSE" or "NOT" or "(" but got "AND"',
       );
     });
 
     it('rejects "FALSE OR NOT NOT FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('FALSE OR NOT NOT FALSE')).toThrowError(
-        'Expected a token of type "Boolean" or "OpenGroup" but got "NOT"',
+        'Error at position 13-15: Expected "TRUE" or "FALSE" or "(" but got "NOT"',
       );
     });
 
     it('rejects "NOT NOT" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('NOT NOT')).toThrowError(
-        'Expected a token of type "Boolean" or "OpenGroup" but got "NOT"',
+        'Error at position 4-6: Expected "TRUE" or "FALSE" or "(" but got "NOT"',
       );
     });
 
     it('rejects "TRUE AND TRUE FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError(
-        'Expected a token of type "Logic" or "CloseGroup" but got "FALSE"',
+        'Error at position 14-18: Expected "AND" or "OR" or ")" but got "FALSE"',
       );
     });
 
     it('rejects "()" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('()')).toThrowError(
-        'Expected a token of type "Boolean" or "Not" or "OpenGroup" but got ")"',
+        'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"',
       );
     });
 
     it('rejects "(" rejects with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('()')).toThrowError(
-        'Expected a token of type "Boolean" or "Not" or "OpenGroup" but got ")"',
+        'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"',
       );
     });
 

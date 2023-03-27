@@ -1,7 +1,7 @@
-import { isGroupToken } from './utils';
+import { isGroupToken } from './tokens';
 
 interface TokenIteratorValue {
-  token: string;
+  rawToken: string;
   startPosition: number;
   endPosition: number;
 }
@@ -41,7 +41,7 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
         const isSpace = /\s/.test(character);
         const isEnd = position === characterCount - 1;
         const isCurrentGroupToken = isGroupToken(character);
-        const isNextGroupToken = isGroupToken(booleanExpression[position + 1]);
+        const isNextGroupToken = isGroupToken(booleanExpression[position + 1] || '');
         const maybeTokenBoundary = isSpace || isEnd || isCurrentGroupToken || isNextGroupToken;
 
         if (!isSpace) {
@@ -61,7 +61,7 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
 
           return {
             value: {
-              token: currentToken,
+              rawToken: currentToken,
               startPosition,
               endPosition: tokenEndPosition,
             },

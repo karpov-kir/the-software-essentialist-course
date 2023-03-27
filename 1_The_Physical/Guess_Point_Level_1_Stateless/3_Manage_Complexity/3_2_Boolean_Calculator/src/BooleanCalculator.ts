@@ -1,33 +1,33 @@
 import { Action, Context, emptyContext, TokenHandler, tokenHandlers } from './tokenHandlers/tokenHandlers';
 import { getTokenIterator } from './tokenIterator';
-import { TokenType } from './tokens';
-import { getTokenType } from './utils';
+import { Token, convertToken } from './tokens';
 
 export class BooleanCalculator {
   isTruthy(booleanExpression: string) {
-    let nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation, TokenType.OpenGroup];
+    let nextAllowedTokens = [Token.True, Token.False, Token.Not, Token.OpenGroup];
     let context: Context = { ...emptyContext };
 
     const tokenIterator = getTokenIterator(booleanExpression);
+
     let openGroupCount = 0;
     let closeGroupCount = 0;
 
     while (true) {
       const {
-        value: { token, startPosition, endPosition },
+        value: { rawToken, startPosition, endPosition },
         done,
       } = tokenIterator.next();
 
-      const tokenType = getTokenType(token);
-
-      if (tokenType === TokenType.OpenGroup) {
-        openGroupCount++;
-      } else if (tokenType === TokenType.CloseGroup) {
-        closeGroupCount++;
-      }
-
       try {
-        [context, nextAllowedTokenTypes] = handleToken(token, context, nextAllowedTokenTypes);
+        const token = convertToken(rawToken);
+
+        if (token === Token.OpenGroup) {
+          openGroupCount++;
+        } else if (token === Token.CloseGroup) {
+          closeGroupCount++;
+        }
+
+        [context, nextAllowedTokens] = handleToken(token, context, nextAllowedTokens);
       } catch (unknownError) {
         const error = unknownError as Error;
         throw new Error(`Error at position ${startPosition}-${endPosition}: ${error.message}`);
@@ -47,18 +47,16 @@ export class BooleanCalculator {
 }
 
 function handleToken(
-  token: string,
+  token: Token,
   context: Context,
-  nextAllowedTokenTypes: TokenType[],
-): [context: Context, nextAllowedTokenTypes: TokenType[]] {
-  const tokenType = getTokenType(token);
-
-  if (!nextAllowedTokenTypes.includes(tokenType)) {
-    throw new Error(`Expected a token of type "${nextAllowedTokenTypes.join('" or "')}" but got "${token}"`);
+  nextAllowedTokens: Token[],
+): [context: Context, nextAllowedTokens: Token[]] {
+  if (!nextAllowedTokens.includes(token)) {
+    throw new Error(`Expected "${nextAllowedTokens.join('" or "')}" but got "${token}"`);
   }
 
-  const tokenHandler: TokenHandler = tokenHandlers[tokenType];
-  const action: Action = { tokenType, token };
+  const tokenHandler: TokenHandler = tokenHandlers[token];
+  const action: Action = { token };
 
   return tokenHandler(context, action);
 }

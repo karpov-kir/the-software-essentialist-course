@@ -1,11 +1,11 @@
-import { TokenType } from '../tokens';
+import { Token } from './../tokens';
 import { TokenHandler } from './tokenHandlers';
 
 export const handleNegationToken: TokenHandler = (context, _action) => {
-  const nextAllowedTokenTypes = [TokenType.Boolean, TokenType.OpenGroup];
+  const nextAllowedTokens = [Token.True, Token.False, Token.OpenGroup];
   const newContext = { ...context };
 
   newContext.shouldNegate = true;
 
-  return [newContext, nextAllowedTokenTypes];
+  return [newContext, nextAllowedTokens];
 };

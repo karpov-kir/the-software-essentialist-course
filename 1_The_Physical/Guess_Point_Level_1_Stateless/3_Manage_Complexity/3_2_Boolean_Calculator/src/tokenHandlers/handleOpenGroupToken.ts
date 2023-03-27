@@ -1,11 +1,11 @@
-import { TokenType } from '../tokens';
+import { Token } from './../tokens';
 import { emptyContext, TokenHandler } from './tokenHandlers';
 
 export const handleOpenGroupToken: TokenHandler = (context, _action) => {
+  const nextAllowedTokens = [Token.True, Token.False, Token.Not, Token.OpenGroup];
   const newContext = { ...emptyContext };
-  const nextAllowedTokenTypes = [TokenType.Boolean, TokenType.Negation, TokenType.OpenGroup];
 
   newContext.parentContext = context;
 
-  return [newContext, nextAllowedTokenTypes];
+  return [newContext, nextAllowedTokens];
 };

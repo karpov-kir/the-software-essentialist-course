@@ -1,8 +1,8 @@
-import { TokenType } from '../tokens';
+import { Token } from './../tokens';
 import { TokenHandler } from './tokenHandlers';
 
 export const handleBooleanToken: TokenHandler = (context, action) => {
-  const nextAllowedTokenTypes = [TokenType.Logic, TokenType.CloseGroup];
+  const nextAllowedTokens = [Token.And, Token.Or, Token.CloseGroup];
   const newContext = { ...context };
   let tokenState = action.token === 'TRUE';
 
@@ -22,5 +22,5 @@ export const handleBooleanToken: TokenHandler = (context, action) => {
   newContext.shouldNegate = false;
   newContext.logic = undefined;
 
-  return [newContext, nextAllowedTokenTypes];
+  return [newContext, nextAllowedTokens];
 };

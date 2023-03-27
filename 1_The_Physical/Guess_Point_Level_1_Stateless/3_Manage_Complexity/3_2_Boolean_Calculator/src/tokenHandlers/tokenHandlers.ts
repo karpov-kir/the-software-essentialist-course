@@ -1,4 +1,4 @@
-import { TokenType, Logic } from '../tokens';
+import { Token } from '../tokens';
 import { handleBooleanToken } from './handleBooleanToken';
 import { handleCloseGroupToken } from './handleCloseGroupHandler';
 import { handleLogicToken } from './handleLogicToken';
@@ -7,11 +7,8 @@ import { handleOpenGroupToken } from './handleOpenGroupToken';
 
 export interface Context {
   shouldNegate: boolean;
-  state:
-    | boolean
-    // Beginning state
-    | undefined;
-  logic: Logic | undefined;
+  state?: boolean;
+  logic?: Token.And | Token.Or;
   parentContext?: Context;
 }
 
@@ -23,16 +20,17 @@ export const emptyContext: Context = {
 };
 
 export type Action = {
-  tokenType: TokenType;
-  token: string;
+  token: Token;
 };
 
-export type TokenHandler = (context: Context, action: Action) => [context: Context, nextAllowedTokenTypes: TokenType[]];
+export type TokenHandler = (context: Context, action: Action) => [context: Context, nextAllowedTokens: Token[]];
 
 export const tokenHandlers: Record<string, TokenHandler> = {
-  [TokenType.Boolean]: handleBooleanToken,
-  [TokenType.Negation]: handleNegationToken,
-  [TokenType.Logic]: handleLogicToken,
-  [TokenType.OpenGroup]: handleOpenGroupToken,
-  [TokenType.CloseGroup]: handleCloseGroupToken,
+  [Token.True]: handleBooleanToken,
+  [Token.False]: handleBooleanToken,
+  [Token.Not]: handleNegationToken,
+  [Token.Or]: handleLogicToken,
+  [Token.And]: handleLogicToken,
+  [Token.OpenGroup]: handleOpenGroupToken,
+  [Token.CloseGroup]: handleCloseGroupToken,
 };
