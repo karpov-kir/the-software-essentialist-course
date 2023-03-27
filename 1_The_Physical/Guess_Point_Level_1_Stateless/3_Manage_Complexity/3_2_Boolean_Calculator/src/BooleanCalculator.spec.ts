@@ -88,6 +88,7 @@ describe(BooleanCalculator, () => {
       ['NOT NOT', 'Error at position 4-6: Expected "TRUE" or "FALSE" or "(" but got "NOT"'],
       ['TRUE AND TRUE FALSE', 'Error at position 14-18: Expected "AND" or "OR" or ")" but got "FALSE"'],
       ['()', 'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"'],
+      ['', 'Boolean expression must not be empty'],
     ])('rejects "%s" with an unexpected input error', (booleanExpression, expectedError) => {
       expect(() => booleanCalculator.isTruthy(booleanExpression)).toThrowError(expectedError);
     });
