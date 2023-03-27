@@ -2,7 +2,8 @@ import { isGroupToken } from './utils';
 
 interface TokenIteratorValue {
   token: string;
-  position: number;
+  startPosition: number;
+  endPosition: number;
 }
 
 export function getTokenIterator(booleanExpression: string): Iterator<TokenIteratorValue> {
@@ -10,32 +11,35 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
     throw new Error('Boolean expression must not be empty');
   }
 
-  let position = 0;
+  const geSpaceCountStartingFrom = (position: number) => {
+    let spaceCount = 0;
 
-  const geSpaceCountStartingFrom = (startPosition: number) => {
-    let count = 0;
-
-    for (let l = booleanExpression.length; startPosition < l; startPosition++) {
-      const character = booleanExpression[startPosition];
+    for (let l = booleanExpression.length; position < l; position++) {
+      const character = booleanExpression[position];
 
       if (/\s/.test(character)) {
-        count++;
+        spaceCount++;
       } else {
         break;
       }
     }
 
-    return count;
+    return spaceCount;
   };
+
+  let nextStartPosition = 0;
 
   return {
     next() {
-      let currentToken = '';
+      const startPosition = nextStartPosition;
 
-      for (let l = booleanExpression.length; position < l; position++) {
+      let currentToken = '';
+      let position = startPosition;
+
+      for (let characterCount = booleanExpression.length; position < characterCount; position++) {
         const character = booleanExpression[position];
         const isSpace = /\s/.test(character);
-        const isEnd = position === l - 1;
+        const isEnd = position === characterCount - 1;
         const isCurrentGroupToken = isGroupToken(character);
         const isNextGroupToken = isGroupToken(booleanExpression[position + 1]);
         const maybeTokenBoundary = isSpace || isEnd || isCurrentGroupToken || isNextGroupToken;
@@ -44,21 +48,24 @@ export function getTokenIterator(booleanExpression: string): Iterator<TokenItera
           currentToken += character;
         }
 
-        if (maybeTokenBoundary && currentToken) {
-          if (isCurrentGroupToken || isNextGroupToken) {
-            position++;
-          }
+        const isTokenBoundary = currentToken && maybeTokenBoundary;
 
-          const spacesAfterToken = geSpaceCountStartingFrom(position);
-          position += spacesAfterToken;
-          const newIsEnd = position >= l - 1;
+        if (isTokenBoundary) {
+          const tokenEndPosition = isSpace ? position - 1 : position;
+          const spacesAfterToken = geSpaceCountStartingFrom(isSpace ? position : position + 1);
+          const positionAfterSpaces = tokenEndPosition + spacesAfterToken;
+          const recalculatedIsEnd = positionAfterSpaces >= characterCount - 1;
+          const nextTokenStartPosition = tokenEndPosition + spacesAfterToken + 1;
+
+          nextStartPosition = nextTokenStartPosition;
 
           return {
             value: {
               token: currentToken,
-              position,
+              startPosition,
+              endPosition: tokenEndPosition,
             },
-            done: newIsEnd,
+            done: recalculatedIsEnd,
           };
         }
       }

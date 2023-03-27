@@ -4,7 +4,6 @@ import { handleCloseGroupToken } from './handleCloseGroupHandler';
 import { handleLogicToken } from './handleLogicToken';
 import { handleNegationToken } from './handleNegationToken';
 import { handleOpenGroupToken } from './handleOpenGroupToken';
-import { LinkedListNode } from './utils';
 
 export interface Context {
   shouldNegate: boolean;
@@ -13,14 +12,14 @@ export interface Context {
     // Beginning state
     | undefined;
   logic: Logic | undefined;
-  currentGroup: LinkedListNode<Context> | undefined;
+  parentContext?: Context;
 }
 
 export const emptyContext: Context = {
   shouldNegate: false,
   logic: undefined,
   state: undefined,
-  currentGroup: undefined,
+  parentContext: undefined,
 };
 
 export type Action = {
@@ -28,13 +27,7 @@ export type Action = {
   token: string;
 };
 
-export type TokenHandler = (
-  context: Context,
-  action: Action,
-) => {
-  context: Context;
-  nextAllowedTokenTypes: TokenType[];
-};
+export type TokenHandler = (context: Context, action: Action) => [context: Context, nextAllowedTokenTypes: TokenType[]];
 
 export const tokenHandlers: Record<string, TokenHandler> = {
   [TokenType.Boolean]: handleBooleanToken,

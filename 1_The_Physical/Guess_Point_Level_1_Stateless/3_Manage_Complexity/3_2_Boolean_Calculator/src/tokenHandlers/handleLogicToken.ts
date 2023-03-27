@@ -7,8 +7,5 @@ export const handleLogicToken: TokenHandler = (context, action) => {
 
   newContext.logic = action.token as Logic;
 
-  return {
-    context: newContext,
-    nextAllowedTokenTypes,
-  };
+  return [newContext, nextAllowedTokenTypes];
 };

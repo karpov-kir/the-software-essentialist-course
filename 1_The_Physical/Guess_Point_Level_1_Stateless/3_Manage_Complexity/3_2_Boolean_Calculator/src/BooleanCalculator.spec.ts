@@ -17,6 +17,7 @@ describe(BooleanCalculator, () => {
       '(TRUE)',
       '(NOT FALSE)',
       '((FALSE OR (FALSE OR TRUE)) AND (FALSE OR NOT FALSE))',
+      '((FALSE OR (FALSE OR TRUE)) AND NOT (TRUE AND FALSE))',
     ])('tells that "%s" is truthy', (booleanExpression) => {
       expect(booleanCalculator.isTruthy(booleanExpression)).toBeTruthy();
     });
@@ -43,11 +44,12 @@ describe(BooleanCalculator, () => {
       'NOT TRUE',
       'TRUE AND NOT TRUE',
       '(FALSE OR TRUE) AND FALSE',
-      '((FALSE OR TRUE) AND FALSE',
+      '((FALSE OR TRUE) AND FALSE)',
       '((FALSE OR (FALSE OR TRUE)) AND (FALSE OR (TRUE AND FALSE)))',
       '(FALSE)',
       '(NOT TRUE)',
       '((FALSE OR (FALSE OR TRUE)) AND (FALSE OR (FALSE AND NOT TRUE)))',
+      '((FALSE OR (FALSE OR TRUE)) AND NOT (FALSE OR TRUE))',
     ])('tells that "%s" is falsy', (booleanExpression) => {
       expect(booleanCalculator.isTruthy(booleanExpression)).toBeFalsy();
     });
@@ -57,7 +59,7 @@ describe(BooleanCalculator, () => {
         ' FALSE  ',
         'TRUE    AND   FALSE',
         '(  (FALSE OR TRUE   ) AND   FALSE  )   ',
-        '   ((  FALSE OR (  FALSE OR TRUE)   ) AND (FALSE OR (FALSE))',
+        '   ((  FALSE OR (  FALSE OR TRUE)   ) AND (FALSE OR (FALSE))  )',
         '(  FALSE  )',
         '  (NOT TRUE)  ',
       ])('tells that "%s" is truthy', (booleanExpression) => {
@@ -91,10 +93,29 @@ describe(BooleanCalculator, () => {
       );
     });
 
-    it('rejects "TRUE AND TRUE FALSE" rejects with an unexpected token error', () => {
+    it('rejects "TRUE AND TRUE FALSE" with an unexpected token error', () => {
       expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError(
         'Expected a token of type "Logic" or "CloseGroup" but got "FALSE"',
       );
     });
+
+    it('rejects "()" with an unexpected token error', () => {
+      expect(() => booleanCalculator.isTruthy('()')).toThrowError(
+        'Expected a token of type "Boolean" or "Not" or "OpenGroup" but got ")"',
+      );
+    });
+
+    it('rejects "(" rejects with an unexpected token error', () => {
+      expect(() => booleanCalculator.isTruthy('()')).toThrowError(
+        'Expected a token of type "Boolean" or "Not" or "OpenGroup" but got ")"',
+      );
+    });
+
+    it.each(['(', '(TRUE AND (TRUE OR FALSE', '(TRUE AND (TRUE OR FALSE) AND TRUE'])(
+      'rejects "%s" rejects with an unbalanced parenthesis',
+      (booleanExpression) => {
+        expect(() => booleanCalculator.isTruthy(booleanExpression)).toThrowError('Unbalanced parenthesis');
+      },
+    );
   });
 });

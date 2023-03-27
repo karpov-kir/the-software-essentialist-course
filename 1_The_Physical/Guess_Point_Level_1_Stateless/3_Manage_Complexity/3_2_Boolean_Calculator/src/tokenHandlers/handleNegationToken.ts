@@ -7,8 +7,5 @@ export const handleNegationToken: TokenHandler = (context, _action) => {
 
   newContext.shouldNegate = true;
 
-  return {
-    context: newContext,
-    nextAllowedTokenTypes,
-  };
+  return [newContext, nextAllowedTokenTypes];
 };

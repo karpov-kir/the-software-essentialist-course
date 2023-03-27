@@ -22,8 +22,5 @@ export const handleBooleanToken: TokenHandler = (context, action) => {
   newContext.shouldNegate = false;
   newContext.logic = undefined;
 
-  return {
-    context: newContext,
-    nextAllowedTokenTypes,
-  };
+  return [newContext, nextAllowedTokenTypes];
 };
