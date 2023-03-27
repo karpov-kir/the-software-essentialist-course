@@ -3,10 +3,6 @@ import { BooleanCalculator } from './BooleanCalculator';
 const booleanCalculator = new BooleanCalculator();
 
 describe(BooleanCalculator, () => {
-  it('sandbox', () => {
-    expect(booleanCalculator.isTruthy('TRUE')).toBeTruthy();
-  });
-
   describe('truthy', () => {
     it.each([
       'TRUE',
