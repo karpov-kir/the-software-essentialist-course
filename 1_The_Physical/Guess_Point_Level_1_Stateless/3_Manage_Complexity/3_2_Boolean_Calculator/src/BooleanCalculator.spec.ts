@@ -85,46 +85,15 @@ describe(BooleanCalculator, () => {
   });
 
   describe('unexpected input error', () => {
-    it('rejects "TRUE UNEXPECTED FALSE" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('TRUE UNEXPECTED FALSE')).toThrowError(
-        'Error at position 5-14: Unknown token "UNEXPECTED"',
-      );
-    });
-
-    it('rejects "FALSE OR AND FALSE" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('FALSE OR AND FALSE')).toThrowError(
-        'Error at position 9-11: Expected "TRUE" or "FALSE" or "NOT" or "(" but got "AND"',
-      );
-    });
-
-    it('rejects "FALSE OR NOT NOT FALSE" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('FALSE OR NOT NOT FALSE')).toThrowError(
-        'Error at position 13-15: Expected "TRUE" or "FALSE" or "(" but got "NOT"',
-      );
-    });
-
-    it('rejects "NOT NOT" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('NOT NOT')).toThrowError(
-        'Error at position 4-6: Expected "TRUE" or "FALSE" or "(" but got "NOT"',
-      );
-    });
-
-    it('rejects "TRUE AND TRUE FALSE" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('TRUE AND TRUE FALSE')).toThrowError(
-        'Error at position 14-18: Expected "AND" or "OR" or ")" but got "FALSE"',
-      );
-    });
-
-    it('rejects "()" with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('()')).toThrowError(
-        'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"',
-      );
-    });
-
-    it('rejects "(" rejects with an unexpected token error', () => {
-      expect(() => booleanCalculator.isTruthy('()')).toThrowError(
-        'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"',
-      );
+    it.each([
+      ['TRUE UNEXPECTED FALSE', 'Error at position 5-14: Unknown token "UNEXPECTED"'],
+      ['FALSE OR AND FALSE', 'Error at position 9-11: Expected "TRUE" or "FALSE" or "NOT" or "(" but got "AND"'],
+      ['FALSE OR NOT NOT FALSE', 'Error at position 13-15: Expected "TRUE" or "FALSE" or "(" but got "NOT"'],
+      ['NOT NOT', 'Error at position 4-6: Expected "TRUE" or "FALSE" or "(" but got "NOT"'],
+      ['TRUE AND TRUE FALSE', 'Error at position 14-18: Expected "AND" or "OR" or ")" but got "FALSE"'],
+      ['()', 'Error at position 1-1: Expected "TRUE" or "FALSE" or "NOT" or "(" but got ")"'],
+    ])('rejects "%s" with an unexpected input error', (booleanExpression, expectedError) => {
+      expect(() => booleanCalculator.isTruthy(booleanExpression)).toThrowError(expectedError);
     });
 
     it.each(['(', '(TRUE AND (TRUE OR FALSE', '(TRUE AND (TRUE OR FALSE) AND TRUE'])(
