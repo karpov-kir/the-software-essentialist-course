@@ -34,22 +34,16 @@ export class PalindromeChecker {
   }
 }
 
-const toLowerCase = (character: string) => character.toLowerCase();
-
-const removeSpace = (character: string) => {
-  if (character === ' ') {
-    return undefined;
-  }
-
-  return character;
-};
-
 const getNextValidStringIteratorValue = (
   stringIterator: Iterator<StringIteratorValue>,
 ): StringIteratorValue | undefined => {
   while (true) {
     const { value, done } = stringIterator.next();
-    const [sanitizedCharacter] = [value.character].map(toLowerCase).map(removeSpace);
+    let sanitizedCharacter = value.character.toLowerCase();
+
+    if (sanitizedCharacter === ' ') {
+      sanitizedCharacter = '';
+    }
 
     if (sanitizedCharacter) {
       return {
