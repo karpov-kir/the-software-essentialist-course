@@ -41,10 +41,15 @@ describe(StatsCalculator, () => {
     });
   });
 
-  it('calculates the average value', () => {
-    const stats = statsCalculator.calculate([2, 8, 2]);
+  describe('average value', () => {
+    it.each([
+      { values: [1, 2, 3], result: 2 },
+      { values: [2, 4, 21, -8, 53, 40], result: 18.666666666666668 },
+    ] as TestSample)(`knows that $result is the average value of $values`, ({ values, result }) => {
+      const stats = statsCalculator.calculate(values);
 
-    expect(stats).toEqual(expect.objectContaining({ average: 4 }));
+      expect(stats).toEqual(expect.objectContaining({ average: result }));
+    });
   });
 
   it('does not accept an empty sequence', () => {
