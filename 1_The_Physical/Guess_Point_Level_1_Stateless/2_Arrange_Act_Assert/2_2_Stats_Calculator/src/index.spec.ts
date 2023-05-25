@@ -19,10 +19,15 @@ describe(StatsCalculator, () => {
     });
   });
 
-  it('finds a maximum value', () => {
-    const stats = statsCalculator.calculate([1, 2, 3]);
+  describe('maximum value', () => {
+    it.each([
+      { values: [1, 2, 3], result: 3 },
+      { values: [2, 4, 21, -8, 53, 40], result: 53 },
+    ] as TestSample)(`knows that $result is the maximum value in $values`, ({ values, result }) => {
+      const stats = statsCalculator.calculate(values);
 
-    expect(stats).toEqual(expect.objectContaining({ max: 3 }));
+      expect(stats).toEqual(expect.objectContaining({ max: result }));
+    });
   });
 
   it('counts numbers of elements', () => {
