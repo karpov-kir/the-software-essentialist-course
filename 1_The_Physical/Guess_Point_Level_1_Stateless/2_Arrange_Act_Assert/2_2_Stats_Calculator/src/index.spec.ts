@@ -30,10 +30,15 @@ describe(StatsCalculator, () => {
     });
   });
 
-  it('counts numbers of elements', () => {
-    const stats = statsCalculator.calculate([1, 2, 3]);
+  describe('number of elements', () => {
+    it.each([
+      { values: [1, 2, 3], result: 3 },
+      { values: [2, 4, 21, -8, 53, 40], result: 6 },
+    ] as TestSample)(`knows that $result is the number of elements in $values`, ({ values, result }) => {
+      const stats = statsCalculator.calculate(values);
 
-    expect(stats).toEqual(expect.objectContaining({ numberOfElements: 3 }));
+      expect(stats).toEqual(expect.objectContaining({ numberOfElements: result }));
+    });
   });
 
   it('calculates the average value', () => {
