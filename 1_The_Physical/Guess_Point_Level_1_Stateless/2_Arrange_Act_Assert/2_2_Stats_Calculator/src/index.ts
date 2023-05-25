@@ -7,7 +7,7 @@ interface Stats {
   average: number;
 }
 
-type NonEmptySequence = [number, ...number[]];
+export type NonEmptySequence = [number, ...number[]];
 
 export class StatsCalculator {
   calculate(sequence: NonEmptySequence): Stats {

@@ -1,12 +1,22 @@
-import { StatsCalculator } from './';
+import { NonEmptySequence, StatsCalculator } from './';
 
 const statsCalculator = new StatsCalculator();
 
-describe(StatsCalculator, () => {
-  it('finds a minimum value', () => {
-    const stats = statsCalculator.calculate([1, 2, 3]);
+type TestSample = Array<{
+  values: NonEmptySequence;
+  result: number;
+}>;
 
-    expect(stats).toEqual(expect.objectContaining({ min: 1 }));
+describe(StatsCalculator, () => {
+  describe('minimum value', () => {
+    it.each([
+      { values: [1, 2, 3], result: 1 },
+      { values: [2, 4, 21, -8, 53, 40], result: -8 },
+    ] as TestSample)(`knows that $result is the minimum value in $values`, ({ values, result }) => {
+      const stats = statsCalculator.calculate(values);
+
+      expect(stats).toEqual(expect.objectContaining({ min: result }));
+    });
   });
 
   it('finds a maximum value', () => {
