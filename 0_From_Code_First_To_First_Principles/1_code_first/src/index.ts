@@ -66,6 +66,7 @@ app.put('/users/:id', async (req, res) => {
       firstName,
       lastName,
       email,
+      updatedAt: new Date(),
     });
     res.json(user);
   } catch (error) {
