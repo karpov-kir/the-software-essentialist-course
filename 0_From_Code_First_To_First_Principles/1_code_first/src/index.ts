@@ -9,12 +9,21 @@ class UserService {
   }
 
   async createUser(user: Prisma.UserCreateInput): Promise<User> {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email)) {
+      throw new Error('Invalid email address');
+    }
+
     return await this.prisma.user.create({
       data: user,
     });
   }
 
   async updateUser(id: number, user: Prisma.UserUpdateInput): Promise<User> {
+    // Validate email
+    if (user.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email as string)) {
+      throw new Error('Invalid email address');
+    }
+
     return await this.prisma.user.update({
       where: { id },
       data: user,
