@@ -36,10 +36,10 @@ class UserService {
     }
 
     try {
-    return await this.prisma.user.update({
-      where: { id },
-      data: user,
-    });
+      return await this.prisma.user.update({
+        where: { id },
+        data: user,
+      });
     } catch (error) {
       const prismaError = error as Prisma.PrismaClientKnownRequestError;
       const meta = prismaError.meta as { target?: string | string[] };
@@ -47,7 +47,7 @@ class UserService {
       if (prismaError.code === 'P2002' && meta?.target?.includes('email')) {
         throw new Error('Email address already exists');
       }
-      
+
       throw new Error('Internal server error');
     }
   }
@@ -112,7 +112,7 @@ app.put('/users/:id', async (req, res) => {
     res.json(user);
   } catch (error) {
     const message = (error as Error).message
-    
+
     if (message === 'Invalid email address') {
       return res.status(400).json({ message: 'Invalid email address' });
     }
