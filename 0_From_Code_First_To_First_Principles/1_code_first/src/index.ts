@@ -14,9 +14,9 @@ class UserService {
     });
   }
 
-  async updateUser(email: string, user: Prisma.UserUpdateInput): Promise<User> {
+  async updateUser(id: number, user: Prisma.UserUpdateInput): Promise<User> {
     return await this.prisma.user.update({
-      where: { email },
+      where: { id },
       data: user,
     });
   }
@@ -57,25 +57,19 @@ app.post('/users', async (req: Request, res: Response) => {
   }
 });
 
-app.put('/users/:email', async (req: Request, res: Response) => {
+app.put('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+
   try {
-    const { firstName, lastName } = req.body;
-    const { email } = req.params;
-
-    // Validate request body
-    if (!firstName && !lastName) {
-      return res.status(400).json({ message: 'First name or last name is required' });
-    }
-
-    const user = await userService.updateUser(email, {
+    const user = await userService.updateUser(Number(id), {
       firstName,
       lastName,
+      email,
     });
-
     res.json(user);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
