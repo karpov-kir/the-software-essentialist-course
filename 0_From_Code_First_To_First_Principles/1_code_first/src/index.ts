@@ -13,9 +13,20 @@ class UserService {
       throw new Error('Invalid email address');
     }
 
-    return await this.prisma.user.create({
-      data: user,
-    });
+    try {
+      return await this.prisma.user.create({
+        data: user,
+      });
+    } catch (error) {
+      const prismaError = error as Prisma.PrismaClientKnownRequestError;
+      const meta = prismaError.meta as { target?: string | string[] };
+
+      if (prismaError.code === 'P2002' && meta?.target?.includes('email')) {
+        throw new Error('Email address already exists');
+      }
+
+      throw new Error('Internal server error');
+    }
   }
 
   async updateUser(id: number, user: Prisma.UserUpdateInput): Promise<User> {
@@ -24,10 +35,21 @@ class UserService {
       throw new Error('Invalid email address');
     }
 
+    try {
     return await this.prisma.user.update({
       where: { id },
       data: user,
     });
+    } catch (error) {
+      const prismaError = error as Prisma.PrismaClientKnownRequestError;
+      const meta = prismaError.meta as { target?: string | string[] };
+
+      if (prismaError.code === 'P2002' && meta?.target?.includes('email')) {
+        throw new Error('Email address already exists');
+      }
+      
+      throw new Error('Internal server error');
+    }
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
@@ -67,6 +89,10 @@ app.post('/users', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid email address' });
     }
 
+    if (message === 'Email address already exists') {
+      return res.status(400).json({ message: 'Email address already exists' });
+    }
+
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -89,6 +115,10 @@ app.put('/users/:id', async (req, res) => {
     
     if (message === 'Invalid email address') {
       return res.status(400).json({ message: 'Invalid email address' });
+    }
+
+    if (message === 'Email address already exists') {
+      return res.status(400).json({ message: 'Email address already exists' });
     }
 
     res.status(500).json({ error: 'Internal server error' });
