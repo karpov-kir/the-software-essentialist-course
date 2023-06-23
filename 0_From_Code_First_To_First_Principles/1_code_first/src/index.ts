@@ -73,11 +73,15 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
-app.get('/users/:email', async (req: Request, res: Response) => {
+app.get('/users', async (req: Request, res: Response) => {
   try {
-    const { email } = req.params;
+    const { email } = req.query;
 
-    const user = await userService.getUserByEmail(email);
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    const user = await userService.getUserByEmail(email.toString());
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
