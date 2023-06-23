@@ -121,6 +121,7 @@ app.put('/users/:id', async (req, res) => {
       return res.status(400).json({ message: 'Email address already exists' });
     }
 
+    console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
