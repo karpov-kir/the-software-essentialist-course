@@ -1,5 +1,7 @@
 # Military Time Validator (#militaryTimeValidator)
 
+https://www.essentialist.dev/products/the-software-essentialist/categories/2152578517/posts/2166918794
+
 > Write a class (or a function) capable of validating whether a string time range is a valid military time range or not.
 
 > Here are some string examples.

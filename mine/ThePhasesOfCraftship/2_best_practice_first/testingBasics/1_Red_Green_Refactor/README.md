@@ -9,4 +9,3 @@ What is important at this point?
   1. Fake it
   2. Obvious Implementation
   3. Triangulation
-

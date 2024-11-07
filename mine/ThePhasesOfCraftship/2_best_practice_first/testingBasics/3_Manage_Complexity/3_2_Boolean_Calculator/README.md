@@ -1,5 +1,7 @@
 # Boolean Calculator (#booleanCalculator)
 
+- https://www.essentialist.dev/products/the-software-essentialist/categories/2152578517/posts/2166918829
+
 > Note: This one is hard.
 
 > Create a boolean calculator that takes a boolean expression (as a string) and evaluates it to compute the correct output boolean result 

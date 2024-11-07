@@ -1,5 +1,7 @@
 # Password validator (#passwordValidator)
 
+https://www.essentialist.dev/products/the-software-essentialist/categories/2154926214/posts/2166918687
+
 > Write a function (or a class) for validating passwords. Passwords must meet the following criteria: 
 
 > Between 5 and 15 characters long
