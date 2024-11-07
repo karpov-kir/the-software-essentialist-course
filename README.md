@@ -4,4 +4,4 @@ The official course repo for [The Software Essentialist](https://essentialist.de
 
 The original course assignments with the author's solutions are in the [./ThePhasesOfCraftship](./ThePhasesOfCraftship) directory.
 
-My implementation of the course assignments are in the [./mine/ThePhasesOfCraftship](./mine/ThePhasesOfCraftship) directory.
+My implementation of the course assignments are in the [./ThePhasesOfCraftship_mine](./ThePhasesOfCraftship_mine) directory.
