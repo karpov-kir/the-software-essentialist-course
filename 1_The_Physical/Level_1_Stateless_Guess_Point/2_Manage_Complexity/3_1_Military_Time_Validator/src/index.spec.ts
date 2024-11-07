@@ -1,5 +1,0 @@
-
-describe('military time validator', () => {
-
-
-})
