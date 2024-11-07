@@ -1,7 +1,6 @@
-#  Code first assignment
+# Code first assignment
 
-- https://www.essentialist.dev/products/the-software-essentialist/categories/2154344001/posts/2168948146
-- https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
+https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
 
 ## API
 
