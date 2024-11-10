@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "build": "npm run clean && tsc -b tsconfig.build.json",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
     "clean": "del-cli ./dist ./tsconfig.build.tsbuildinfo",
     "test": "vitest run",
     "test:debug": "vitest --inspect-brk --pool forks --poolOptions.forks.singleFork",
