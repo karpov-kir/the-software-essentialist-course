@@ -2,6 +2,8 @@
 
 https://www.essentialist.dev/products/the-software-essentialist/categories/2153382760/posts/2170010103
 
+WARNING: This attempt was implemented in very early stages of the course, so the implementation does not meet the latest course requirements.
+
 All routes can be found in the [routes.mts](./src/infra/webServer/routes.mts).
 
 ## Prerequisites

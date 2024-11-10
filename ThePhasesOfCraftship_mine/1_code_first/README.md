@@ -2,6 +2,8 @@
 
 https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
 
+WARNING: This attempt was implemented in very early stages of the course, so the implementation does not meet the latest course requirements.
+
 ## API
 
 - `POST /users`: Creates a new user
