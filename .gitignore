@@ -1,8 +1,11 @@
-**/.idea/
-**/.vscode/
+**/.idea
+**/.vscode
 **/.DS_Store
-**/teaching/
+**/teaching
 **/template**
 **/dev.db
+**/dev.db-journal
 **/node_modules
 **/dist
+**/build
+**/tsconfig.build.tsbuildinfo

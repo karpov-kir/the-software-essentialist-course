@@ -1,4 +1,4 @@
-import { isTimeValid, parseTimeRange, isStartTimeLessThanEndTime } from './time';
+import { isStartTimeLessThanEndTime, isTimeValid, parseTimeRange } from './time';
 
 export class TimeValidator {
   isValidMilitaryTimeRange(timeRange: string) {

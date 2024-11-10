@@ -1,6 +1,6 @@
 import { Action, Context, emptyContext, TokenHandler, tokenHandlers } from './tokenHandlers/tokenHandlers';
 import { getTokenIterator } from './tokenIterator';
-import { Token, convertToken } from './tokens';
+import { convertToken, Token } from './tokens';
 
 export class BooleanCalculator {
   isTruthy(booleanExpression: string) {

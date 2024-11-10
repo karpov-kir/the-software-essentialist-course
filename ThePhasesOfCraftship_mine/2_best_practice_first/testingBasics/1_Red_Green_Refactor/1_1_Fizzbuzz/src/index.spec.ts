@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { fizzbuzz } from './fizzbuzz';
 
 describe('fizzbuzz', () => {
@@ -25,7 +27,7 @@ describe('fizzbuzz', () => {
     expect(fizzbuzz(15)).toBe('FizzBuzz.');
   });
 
-  test.each([
+  it.each([
     [3, 'Fizz'],
     [5, 'Buzz.'],
     [19, '19'],

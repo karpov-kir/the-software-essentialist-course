@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { PasswordValidator, ValidationResult } from './';
 
 const passwordValidator = new PasswordValidator();

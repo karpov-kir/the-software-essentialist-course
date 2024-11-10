@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { PalindromeChecker } from './PalindromeChecker';
 
 const palindromeChecker = new PalindromeChecker();

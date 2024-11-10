@@ -1,4 +1,6 @@
-import { TimeValidator } from './index';
+import { describe, expect, it } from 'vitest';
+
+import { TimeValidator } from './';
 
 const timeValidator = new TimeValidator();
 

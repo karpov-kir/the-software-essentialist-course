@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { BooleanCalculator } from './BooleanCalculator';
 
 const booleanCalculator = new BooleanCalculator();

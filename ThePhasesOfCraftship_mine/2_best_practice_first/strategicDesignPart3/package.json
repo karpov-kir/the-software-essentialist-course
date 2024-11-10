@@ -1,12 +1,5 @@
 {
-  "name": "the-software-essentialist-course-ddd-forum-best-practices-first",
-  "version": "1.0.0",
-  "main": "./src/index.ts",
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0",
-    "npm": ">=8.0.0"
-  },
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "prisma:generate": "prisma generate --schema=./src/infra/prisma/schema.prisma",

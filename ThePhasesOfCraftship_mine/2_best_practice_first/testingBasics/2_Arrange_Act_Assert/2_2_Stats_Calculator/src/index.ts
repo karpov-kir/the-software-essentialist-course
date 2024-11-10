@@ -1,4 +1,4 @@
-import { AverageValueAggregator, MinValueAggregator, MaxValueAggregator } from './NumberAggregator';
+import { AverageValueAggregator, MaxValueAggregator, MinValueAggregator } from './NumberAggregator';
 
 interface Stats {
   min: number;

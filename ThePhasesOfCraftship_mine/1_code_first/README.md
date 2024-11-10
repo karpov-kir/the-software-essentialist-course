@@ -11,9 +11,14 @@ https://www.essentialist.dev/products/the-software-essentialist/categories/21543
 ## How to start locally
 
 ```
-npm ci
-cd src
-npx prisma generate
-npx prisma migrate deploy
-npm run start
+npm ci && npm run prisma:generate prisma:migrate
+npm run start:dev
+```
+
+Examples:
+
+```
+curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d '{"email": "test@mail.com", "firstName": "John", "lastName": "Doe"}'
+curl -X PUT http://localhost:3000/users/1 -H "Content-Type: application/json" -d '{"firstName": "Jane"}'
+curl -X GET 'http://localhost:3000/users?email=test@mail.com'
 ```

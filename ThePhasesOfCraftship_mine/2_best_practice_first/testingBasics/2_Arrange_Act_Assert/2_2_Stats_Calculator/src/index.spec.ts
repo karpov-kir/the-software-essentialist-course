@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { NonEmptySequence, StatsCalculator } from './';
 
 const statsCalculator = new StatsCalculator();

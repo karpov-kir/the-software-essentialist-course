@@ -1,6 +1,6 @@
-import { handleBooleanToken } from './handleBooleanToken';
 import { Token } from '../tokens';
-import { TokenHandler, Action, Context } from './tokenHandlers';
+import { handleBooleanToken } from './handleBooleanToken';
+import { Action, Context, TokenHandler } from './tokenHandlers';
 
 export const handleCloseGroupToken: TokenHandler = (context, _action) => {
   const nextAllowedTokens = [Token.And, Token.Or, Token.CloseGroup];
