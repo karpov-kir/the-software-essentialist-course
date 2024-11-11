@@ -1,6 +1,7 @@
 # Best practices first assignment
 
-https://www.essentialist.dev/products/the-software-essentialist/categories/2153382760/posts/2170010103
+- Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2153382760/posts/2170010103
+- PR: It was done in an old repo that is deleted now
 
 WARNING: This attempt was implemented in very early stages of the course, so the implementation does not meet the latest course requirements.
 

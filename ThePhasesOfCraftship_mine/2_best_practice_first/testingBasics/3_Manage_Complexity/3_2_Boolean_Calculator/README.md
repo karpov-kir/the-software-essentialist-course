@@ -1,6 +1,7 @@
 # Boolean Calculator (#booleanCalculator)
 
-- https://www.essentialist.dev/products/the-software-essentialist/categories/2152578517/posts/2166918829
+- Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2152578517/posts/2166918829
+- PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/7
 
 > Note: This one is hard.
 

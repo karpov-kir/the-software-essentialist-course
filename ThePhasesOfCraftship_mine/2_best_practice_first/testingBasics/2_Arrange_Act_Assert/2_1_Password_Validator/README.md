@@ -1,6 +1,7 @@
 # Password validator (#passwordValidator)
 
-https://www.essentialist.dev/products/the-software-essentialist/categories/2154926214/posts/2166918687
+- Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2154926214/posts/2166918687
+- PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/3
 
 > Write a function (or a class) for validating passwords. Passwords must meet the following criteria: 
 

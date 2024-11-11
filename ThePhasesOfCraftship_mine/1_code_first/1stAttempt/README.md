@@ -1,6 +1,7 @@
 # Code first assignment
 
-https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
+- Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
+- PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/8
 
 WARNING: This attempt was implemented in very early stages of the course, so the implementation does not meet the latest course requirements.
 

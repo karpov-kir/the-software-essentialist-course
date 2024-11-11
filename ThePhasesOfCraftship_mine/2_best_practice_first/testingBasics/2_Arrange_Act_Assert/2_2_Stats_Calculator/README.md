@@ -1,6 +1,7 @@
 # Stats Calculator (#statsCalculator)
 
-https://www.essentialist.dev/products/the-software-essentialist/categories/2154926214/posts/2167292199
+- Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2154926214/posts/2167292199
+- PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/5
 
 > Your task is to process a sequence of integer numbers to determine the following statistics:
 
