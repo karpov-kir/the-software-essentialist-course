@@ -1,4 +1,4 @@
-# Code first assignment
+# Code first assignment 1st attempt
 
 - Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
 - PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/8

@@ -1,26 +1,33 @@
 {
+  "name": "@dddforum/monorepo",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend",
+    "packages/shared"
+  ],
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.build.json",
-    "clean": "del-cli ./dist ./tsconfig.build.tsbuildinfo",
-    "start:dev": "npx nodemon",
-    "start": "node dist/index.js",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "npm run lint -- --fix"
+    "build": "lerna run build",
+    "build:frontend": "npm run build -w @dddforum/frontend",
+    "clean": "lerna run clean",
+    "lint": "eslint \"packages/**/src/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "start:dev:backend": "npm run start:dev -w @dddforum/backend",
+    "start:dev:frontend": "npm run start:dev -w @dddforum/frontend",
+    "start:backend": "npm run start -w @dddforum/backend"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/express": "^4.17.21",
-    "@types/node": "^22.9.0",
+    "@vitest/coverage-v8": "^2.1.4",
     "del-cli": "^6.0.0",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "nodemon": "^3.1.7",
+    "lerna": "^8.1.9",
     "prettier": "^3.3.3",
-    "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0"

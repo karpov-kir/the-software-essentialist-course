@@ -9,6 +9,9 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "./",
-    "types": ["node"]
+    "paths": {
+      "@guessir/shared/dist/*": ["./packages/shared/src/*"]
+    },
+    "types": []
   }
 }
