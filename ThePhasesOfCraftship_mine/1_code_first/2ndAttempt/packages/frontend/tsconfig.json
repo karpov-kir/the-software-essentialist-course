@@ -5,6 +5,8 @@
     "types": ["vite/client"],
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "moduleResolution": "Bundler"
   },
   "references": [
