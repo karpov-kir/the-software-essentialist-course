@@ -3,7 +3,10 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2022"],
     "types": ["vite/client"],
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Bundler"
   },
   "references": [
     {

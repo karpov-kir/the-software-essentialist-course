@@ -9,3 +9,5 @@
 **/dist
 **/build
 **/tsconfig.build.tsbuildinfo
+**/*.css.d.ts
+**/*.scss.d.ts
