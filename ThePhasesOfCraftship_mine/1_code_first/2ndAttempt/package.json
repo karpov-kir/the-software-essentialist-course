@@ -12,7 +12,7 @@
     "build": "lerna run build",
     "build:frontend": "npm run build -w @dddforum/frontend",
     "clean": "lerna run clean",
-    "lint:eslint": "eslint \"packages/**/src/**/*.ts\"",
+    "lint:eslint": "eslint \"packages/**/src/**/*.{ts,tsx,js,jsx,json}\"",
     "lint:eslint:fix": "npm run lint:eslint -- --fix",
     "lint:stylelint": "stylelint \"packages/**/src/**/*.{css,scss}\"",
     "lint:stylelint:fix": "npm run lint:stylelint -- --fix",
