@@ -1,5 +1,6 @@
 {
-  "watch": ["src"],
+  "watch": ["src", "../shared"],
+  "ignore": ["../shared/dist"],
   "ext": "ts,js",
   "exec": "node --import ./loaders/dev.mjs ./src/index.ts"
 }

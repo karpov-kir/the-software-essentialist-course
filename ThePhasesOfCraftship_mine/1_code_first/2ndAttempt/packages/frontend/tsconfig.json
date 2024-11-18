@@ -3,15 +3,15 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2022"],
     "types": ["vite/client"],
+    "noEmit": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "allowImportingTsExtensions": true,
-    "noEmit": true,
     "moduleResolution": "Bundler"
   },
   "references": [
     {
-      "path": "../shared/tsconfig.json"
+      "path": "../shared/tsconfig.build.json"
     }
   ]
 }

@@ -1,20 +1,23 @@
-import react from "@vitejs/plugin-react";
+import reactPlugin from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import checker from "vite-plugin-checker";
-import PrettyModuleClassnames from "vite-plugin-pretty-module-classnames";
-import sassDts from "vite-plugin-sass-dts";
+import checkerPlugin from "vite-plugin-checker";
+import prettyModuleClassnamesPlugin from "vite-plugin-pretty-module-classnames";
+import sassDtsPlugin from "vite-plugin-sass-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    checker({
-      typescript: true,
+    reactPlugin(),
+    checkerPlugin({
+      typescript: {
+        buildMode: true,
+        tsconfigPath: "./tsconfig.build.json",
+      },
     }),
     // TODO conditional can be removed once the issue is resolved
     // https://github.com/teplostanski/vite-plugin-pretty-module-classnames/issues/57#issuecomment-2345238182
-    process.env.VITEST ? undefined : PrettyModuleClassnames(),
-    sassDts({
+    process.env.VITEST ? undefined : prettyModuleClassnamesPlugin(),
+    sassDtsPlugin({
       // By default only the `development` mode is enabled, which means that the `d.ts` files are generated only:
       //  - when the `dev` command is running
       //  - and after the source files are changed

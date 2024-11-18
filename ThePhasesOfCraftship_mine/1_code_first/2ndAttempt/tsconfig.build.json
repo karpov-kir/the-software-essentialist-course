@@ -5,5 +5,6 @@
     "**/vitest.config.ts",
     "**/tests/**",
     "**/vite.config.ts",
+    "**/dist/**/*"
   ]
 }
