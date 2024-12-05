@@ -1,0 +1,89 @@
+import {
+  AccessTokenDto,
+  SignInDto,
+  SignInServerErrorReason,
+  SignUpDto,
+  SignUpServerErrorReason,
+} from "@dddforum/shared/dist/dtos/UserDto";
+import { signUpDtoSchema } from "@dddforum/shared/dist/validationSchemas/signUpDtoSchema";
+import { FastifyInstance } from "fastify";
+
+import { getOrm } from "../db/initOrm";
+import { UserEntity } from "../db/UserEntity";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { getCurrentUserFromHeaders, newAccessToken } from "../utils/auth";
+import { encryptPassword, isPasswordValid } from "../utils/password";
+import { toUserDto } from "../utils/toDtos";
+
+export const newUsersApi = async (fastify: FastifyInstance) => {
+  const { userRepository, orm } = await getOrm();
+
+  fastify.get("/users/me", async (request) => {
+    const user = await getCurrentUserFromHeaders(request.headers);
+
+    if (!user) {
+      throw new UnauthorizedError();
+    }
+
+    return toUserDto(user);
+  });
+
+  fastify.post<{
+    Body: SignInDto;
+  }>("/users/sign-in", async (request) => {
+    const { username, password } = request.body;
+
+    const user = await userRepository.findOne({ username });
+
+    if (!user) {
+      throw new UnauthorizedError({
+        reason: SignInServerErrorReason.UserNotFound,
+      });
+    }
+
+    if (!(await isPasswordValid(password, user.password))) {
+      throw new UnauthorizedError({
+        reason: SignInServerErrorReason.InvalidPassword,
+      });
+    }
+
+    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(user.email) };
+
+    return accessTokenDto;
+  });
+
+  fastify.post<{
+    Body: SignUpDto;
+  }>("/users/sign-up", async (request) => {
+    const { email, password, lastName, firstName, username } = signUpDtoSchema.parse(request.body);
+
+    const newUser = new UserEntity();
+    newUser.email = email;
+    newUser.password = await encryptPassword(password);
+    newUser.firstName = firstName;
+    newUser.lastName = lastName;
+    newUser.username = username;
+
+    userRepository.create(newUser);
+
+    try {
+      await orm.em.flush();
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        throw new UnauthorizedError({
+          reason: SignUpServerErrorReason.UserAlreadyExists,
+        });
+      }
+
+      throw error;
+    }
+
+    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(email) };
+
+    return accessTokenDto;
+  });
+};
+
+const isUniqueConstraintError = (error: unknown) => {
+  return error && typeof error === "object" && "name" in error && error.name === "UniqueConstraintViolationException";
+};
