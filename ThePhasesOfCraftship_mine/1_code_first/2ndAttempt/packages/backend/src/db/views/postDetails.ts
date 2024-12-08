@@ -2,6 +2,7 @@ import { PostDetailsDto } from "@dddforum/shared/dist/dtos/PostDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { EntityManager } from "@mikro-orm/sqlite";
 
+// Selects all post comments as a JSON array
 const getCommentsSubQuery = (currentMemberIdToIncludeVote: number | undefined) => {
   const jsonObjectProperties = [
     ["id", "c.id"],

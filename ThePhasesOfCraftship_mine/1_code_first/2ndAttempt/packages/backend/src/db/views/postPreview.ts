@@ -24,7 +24,7 @@ export const fetchPostPreviews = async (
     currentMemberIdToIncludeVote,
     // Select only posts with 4 or more comments
     onlyPopular,
-    // Select only posts created in the last 20 days
+    // Select only posts created in the last 22 days
     onlyNew,
   }: { currentMemberIdToIncludeVote?: number; onlyPopular?: boolean; onlyNew?: boolean } = {},
 ): Promise<PostPreviewDto[]> => {
@@ -68,7 +68,7 @@ export const fetchPostPreviews = async (
   const whereCriterion = [
     "1 = 1",
     onlyPopular ? `commentCount >= 4` : undefined,
-    onlyNew ? `date(createdAt / 1000, 'unixepoch') >= datetime('now', '-20 days')` : undefined,
+    onlyNew ? `date(createdAt / 1000, 'unixepoch') >= datetime('now', '-22 days')` : undefined,
   ]
     .filter((condition) => condition !== undefined)
     .join(" and ");
