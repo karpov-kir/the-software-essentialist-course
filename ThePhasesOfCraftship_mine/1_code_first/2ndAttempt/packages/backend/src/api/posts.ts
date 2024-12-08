@@ -56,9 +56,7 @@ export const newPostsApi = async (fastify: FastifyInstance) => {
 
     const postId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => voteOnPost(postId, member.id, VoteType.Upvote, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => voteOnPost(postId, member.id, VoteType.Upvote, em));
   });
 
   fastify.post<{
@@ -73,9 +71,7 @@ export const newPostsApi = async (fastify: FastifyInstance) => {
 
     const postId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => voteOnPost(postId, member.id, VoteType.Downvote, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => voteOnPost(postId, member.id, VoteType.Downvote, em));
   });
 
   fastify.delete<{
@@ -90,8 +86,6 @@ export const newPostsApi = async (fastify: FastifyInstance) => {
 
     const postId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => removeVoteOnPost(postId, member.id, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => removeVoteOnPost(postId, member.id, em));
   });
 };

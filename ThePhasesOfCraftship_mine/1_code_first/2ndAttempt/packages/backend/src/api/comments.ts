@@ -22,9 +22,7 @@ export const newCommentsApi = async (fastify: FastifyInstance) => {
 
     const commentId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => voteOnComment(commentId, member.id, VoteType.Upvote, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => voteOnComment(commentId, member.id, VoteType.Upvote, em));
   });
 
   fastify.post<{
@@ -39,9 +37,7 @@ export const newCommentsApi = async (fastify: FastifyInstance) => {
 
     const commentId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => voteOnComment(commentId, member.id, VoteType.Downvote, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => voteOnComment(commentId, member.id, VoteType.Downvote, em));
   });
 
   fastify.delete<{
@@ -56,8 +52,6 @@ export const newCommentsApi = async (fastify: FastifyInstance) => {
 
     const commentId = parseInt(request.params.id);
 
-    await orm.em.transactional((em) => removeVoteOnComment(commentId, member.id, em), {
-      isolationLevel: IsolationLevel.SERIALIZABLE,
-    });
+    await orm.em.transactional((em) => removeVoteOnComment(commentId, member.id, em));
   });
 };
