@@ -6,11 +6,9 @@ import { newCommentsApi } from "./api/comments";
 import { newPostsApi } from "./api/posts";
 import { newUsersApi } from "./api/users";
 import { getOrm, initOrm } from "./db/getOrm";
-import { seed } from "./db/seed";
 import { errorHandler } from "./errors/errorHandler";
 
 await initOrm();
-await seed();
 
 const fastify = Fastify({
   logger: {

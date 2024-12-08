@@ -21,7 +21,8 @@
     "start:dev:backend": "npm run start:dev -w @dddforum/backend",
     "start:dev:frontend": "npm run start:dev -w @dddforum/frontend",
     "start:backend": "npm run start -w @dddforum/backend",
-    "db:migrate": "npm run db:migrate -w @dddforum/backend"
+    "db:migrate": "npm run db:migrate -w @dddforum/backend",
+    "db:seed": "npm run db:seed -w @dddforum/backend"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",

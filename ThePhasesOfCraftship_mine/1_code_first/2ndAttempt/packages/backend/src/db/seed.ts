@@ -7,7 +7,7 @@ import { MemberEntity } from "./entities/MemberEntity";
 import { PostEntity } from "./entities/PostEntity";
 import { UserEntity } from "./entities/UserEntity";
 import { VoteEntity } from "./entities/VoteEntity";
-import { getOrm } from "./getOrm";
+import { getOrm, initOrm } from "./getOrm";
 
 type CreationAttributes<T> = Omit<T, "id">;
 
@@ -21,7 +21,14 @@ const getRandomCreatedAt = () => {
   return new Date(usersCreatedAt.getTime() + Math.random() * twoWeeksMs);
 };
 
-export async function seed() {
+await initOrm();
+await seed();
+
+const { orm } = await getOrm();
+
+await orm.close();
+
+async function seed() {
   const { forkEm } = await getOrm();
   const em = forkEm();
 
