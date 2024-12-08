@@ -1,21 +1,6 @@
-import { MemberDto } from "@dddforum/shared/dist/dtos/MemberDto";
 import { PostPreviewDto } from "@dddforum/shared/dist/dtos/PostDto";
-import { VoteDto, VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
+import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { EntityManager } from "@mikro-orm/sqlite";
-
-export class PostPreviewView {
-  id!: number;
-  title!: string;
-  content!: string;
-  upvoteCount!: number;
-  downvoteCount!: number;
-  commentsUpvoteCount!: number;
-  commentsDownvoteCount!: number;
-  commentCount!: number;
-  createdAt!: Date;
-  member!: MemberDto;
-  currentMemberVote?: VoteDto;
-}
 
 export const fetchPostPreviews = async (
   em: EntityManager,
