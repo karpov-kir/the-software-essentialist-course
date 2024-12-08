@@ -41,7 +41,6 @@ await newPostsApi(fastify);
 await newUsersApi(fastify);
 await newCommentsApi(fastify);
 
-// Run the server!
 fastify.listen({ port: 3000 }, (err, _address) => {
   if (err) throw err;
 });
