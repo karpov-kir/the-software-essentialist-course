@@ -119,6 +119,7 @@ export const fetchPostDetails = async (
     limit 1
   `;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rows: Record<string, any>[] = await em.getKnex().raw(query, {
     currentMemberIdToIncludeVote,
     postId,

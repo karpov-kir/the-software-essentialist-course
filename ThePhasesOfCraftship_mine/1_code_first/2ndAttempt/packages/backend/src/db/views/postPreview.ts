@@ -106,6 +106,7 @@ export const fetchPostPreviews = async (
     order by p.created_at desc
   `;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rows: Record<string, any>[] = await em.getKnex().raw(query, {
     currentMemberIdToIncludeVote,
   });
