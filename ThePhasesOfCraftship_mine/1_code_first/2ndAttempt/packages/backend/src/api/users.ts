@@ -15,7 +15,7 @@ import { getCurrentUserFromHeaders, newAccessToken } from "../utils/auth";
 import { encryptPassword, isPasswordValid } from "../utils/password";
 
 export const newUsersApi = async (fastify: FastifyInstance) => {
-  const { userRepository, orm } = await getOrm();
+  const { userRepository, memberRepository, orm } = await getOrm();
 
   fastify.get("/users/me", async (request) => {
     const user = await getCurrentUserFromHeaders(request.headers);
@@ -56,11 +56,12 @@ export const newUsersApi = async (fastify: FastifyInstance) => {
   }>("/users/sign-up", async (request) => {
     const { password, ...restPayload } = signUpDtoSchema.parse(request.body);
 
-    userRepository.create({
+    const user = userRepository.create({
       ...restPayload,
       password: await encryptPassword(password),
       createdAt: new Date(),
     });
+    memberRepository.create({ user, createdAt: new Date() });
 
     try {
       await orm.em.flush();
