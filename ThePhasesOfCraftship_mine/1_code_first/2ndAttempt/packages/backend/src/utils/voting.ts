@@ -25,17 +25,10 @@ async function vote(entity: PostEntity | CommentEntity, memberId: number, voteTy
     });
   }
 
-  console.log(
-    `Member ${memberId} is voting ${voteType} on ${entity instanceof PostEntity ? "post" : "comment"} ${entity.id}`,
-  );
-
   if (existingVote) {
-    console.log(`Found existing vote ${existingVote.type}`);
-
     if (existingVote.type !== voteType) {
       existingVote.type = voteType;
       em.persist(existingVote);
-      console.log(`Changed vote to ${voteType}`);
     }
   } else {
     const vote = new VoteEntity();
@@ -47,8 +40,6 @@ async function vote(entity: PostEntity | CommentEntity, memberId: number, voteTy
     } else {
       vote.comment = entity;
     }
-
-    console.log(`Created new vote ${voteType}`);
 
     em.persist(vote);
   }
