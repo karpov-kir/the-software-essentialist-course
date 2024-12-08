@@ -46,3 +46,7 @@ curl -X GET http://localhost:3000/posts/:id
 
 curl -X POST http://localhost:3000/posts/:id/upvote -H "Authorization: Bearer <token>"
 ```
+
+## Demo
+
+![Demo](./demo.gif)
