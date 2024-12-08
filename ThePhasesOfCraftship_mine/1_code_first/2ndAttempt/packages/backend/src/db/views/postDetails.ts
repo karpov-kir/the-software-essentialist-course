@@ -25,19 +25,19 @@ const getCommentsSubQuery = (em: EntityManager, currentMemberIdToIncludeVote: nu
     [
       "upvoteCount",
       `(${knex
-        .from("vote_entity as v")
+        .from("vote_entity")
         .count("*")
         .where("type", VoteType.Upvote)
-        .where("v.comment_id", knex.raw("c.id"))
+        .where("comment_id", knex.raw("c.id"))
         .toQuery()})`,
     ],
     [
       "downvoteCount",
       `(${knex
-        .from("vote_entity as v")
+        .from("vote_entity")
         .count("*")
         .where("type", VoteType.Downvote)
-        .where("v.comment_id", knex.raw("c.id"))
+        .where("comment_id", knex.raw("c.id"))
         .toQuery()})`,
     ],
     ["createdAt", "c.created_at"],
@@ -98,15 +98,15 @@ export const fetchPostDetails = async (
         .from("vote_entity as v")
         .count("*")
         .as("upvoteCount")
-        .where("v.post_id", knex.raw("p.id"))
-        .where("v.type", VoteType.Upvote)
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Upvote)
         .whereNull("comment_id"),
       knex
         .from("vote_entity as v")
         .count("*")
         .as("downvoteCount")
-        .where("v.post_id", knex.raw("p.id"))
-        .where("v.type", VoteType.Downvote)
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Downvote)
         .whereNull("comment_id"),
 
       getCommentsSubQuery(em, currentMemberIdToIncludeVote).as("comments"),

@@ -33,35 +33,35 @@ export const fetchPostPreviews = async (
       "u.username as member_user_username",
 
       knex
-        .from("vote_entity as v1")
+        .from("vote_entity")
         .count("*")
         .as("upvoteCount")
-        .where("v1.post_id", knex.raw("p.id"))
-        .where("v1.type", VoteType.Upvote)
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Upvote)
         .whereNull("comment_id"),
       knex
-        .from("vote_entity as v2")
+        .from("vote_entity")
         .count("*")
         .as("downvoteCount")
-        .where("v2.post_id", knex.raw("p.id"))
-        .where("v2.type", VoteType.Downvote)
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Downvote)
         .whereNull("comment_id"),
 
       knex
-        .from("vote_entity as v3")
+        .from("vote_entity")
         .count("*")
         .as("commentsUpvoteCount")
-        .where("v3.post_id", knex.raw("p.id"))
-        .where("v3.type", VoteType.Upvote)
-        .whereNotNull("v3.comment_id"),
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Upvote)
+        .whereNotNull("comment_id"),
       knex
-        .from("vote_entity as v4")
+        .from("vote_entity")
         .count("*")
         .as("commentsDownvoteCount")
-        .where("v4.post_id", knex.raw("p.id"))
-        .where("v4.type", VoteType.Downvote)
-        .whereNotNull("v4.comment_id"),
-      knex.from("comment_entity as c").count("*").as("commentCount").where("c.post_id", knex.raw("p.id")),
+        .where("post_id", knex.raw("p.id"))
+        .where("type", VoteType.Downvote)
+        .whereNotNull("comment_id"),
+      knex.from("comment_entity").count("*").as("commentCount").where("post_id", knex.raw("p.id")),
     ])
     .leftJoin("member_entity as m", "m.id", "p.member_id")
     .leftJoin("user_entity as u", "u.id", "m.user_id")
