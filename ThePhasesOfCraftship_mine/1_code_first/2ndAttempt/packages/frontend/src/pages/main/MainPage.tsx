@@ -1,4 +1,4 @@
-import { PostPreviewDto, PostSort } from "@dddforum/shared/dist/dtos/PostDto";
+import { PostFilter, PostPreviewDto } from "@dddforum/shared/dist/dtos/PostDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { Alert, Center, Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -10,11 +10,11 @@ import { ApiClient } from "../../ApiClient";
 import { PostRow } from "../../components/PostRow";
 import { currentUserAtom } from "../../root/currentUserAtom";
 import { computePostVotes } from "../../utils/computeVotes";
-import { PostSortSwitcher } from "./PostSortSwitcher";
+import { PostFilterSwitcher } from "./PostSortSwitcher";
 
 export function MainPage() {
-  const [sort, setSort] = useState<PostSort>(PostSort.Popular);
-  const { posts, error, voteOnPost, isLoading } = useFetchPosts(sort);
+  const [filter, setFilter] = useState<PostFilter>(PostFilter.Popular);
+  const { posts, error, voteOnPost, isLoading } = useFetchPosts(filter);
 
   const renderPosts = () => {
     if (error) {
@@ -34,13 +34,13 @@ export function MainPage() {
 
   return (
     <Fragment>
-      <PostSortSwitcher sort={sort} onChange={setSort} />
+      <PostFilterSwitcher filter={filter} onChange={setFilter} />
       {renderPosts()}
     </Fragment>
   );
 }
 
-const useFetchPosts = (sort: PostSort) => {
+const useFetchPosts = (sort: PostFilter) => {
   const [posts, setPosts] = useState<PostPreviewDto[]>([]);
   const [error, setError] = useState<Error | undefined>();
   const [isLoading, setIsLoading] = useState(false);

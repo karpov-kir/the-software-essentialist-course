@@ -1,4 +1,4 @@
-import { PostSort } from "@dddforum/shared/dist/dtos/PostDto";
+import { PostFilter } from "@dddforum/shared/dist/dtos/PostDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { IsolationLevel } from "@mikro-orm/sqlite";
 import { FastifyInstance } from "fastify";
@@ -15,14 +15,14 @@ export const newPostsApi = async (fastify: FastifyInstance) => {
   const { orm } = await getOrm();
 
   fastify.get<{
-    Querystring: { sort?: string };
+    Querystring: { filter?: string };
   }>("/posts", async (request) => {
-    const { sort } = request.query;
+    const { filter } = request.query;
     const user = await getCurrentUserFromHeaders(request.headers, { includeMember: true });
     const posts = await fetchPostPreviews(orm.em, {
       currentMemberIdToIncludeVote: user?.member?.id,
-      onlyNew: sort === PostSort.New,
-      onlyPopular: sort === PostSort.Popular,
+      onlyNew: filter === PostFilter.New,
+      onlyPopular: filter === PostFilter.Popular,
     });
 
     return posts;

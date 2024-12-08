@@ -4,6 +4,11 @@
 - https://www.essentialist.dev/products/the-software-essentialist/categories/2154344011/posts/2173535677
 - PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/9
 
+## API
+- `GET /posts` - get all posts
+- `GET /posts/:id?filter=<filter>` - get post by id
+  - `filter` - `new` | `popular` | `all` (default)
+
 ## How to start locally
 
 - `npm ci`

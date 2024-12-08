@@ -2,7 +2,7 @@ import { CommentDto } from "./CommentDto";
 import { MemberDto } from "./MemberDto";
 import { VoteType } from "./VoteDto";
 
-export enum PostSort {
+export enum PostFilter {
   Popular = "popular",
   New = "new",
   All = "all",

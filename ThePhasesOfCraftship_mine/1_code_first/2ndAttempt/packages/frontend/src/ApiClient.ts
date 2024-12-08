@@ -1,4 +1,4 @@
-import { PostDetailsDto, PostPreviewDto, PostSort } from "@dddforum/shared/dist/dtos/PostDto";
+import { PostDetailsDto, PostFilter, PostPreviewDto } from "@dddforum/shared/dist/dtos/PostDto";
 import { isServerErrorDto, ServerErrorDto } from "@dddforum/shared/dist/dtos/ServerErrorDto";
 import { SignInDto, SignUpDto, UserDto } from "@dddforum/shared/dist/dtos/UserDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
@@ -110,10 +110,10 @@ class HttpClient {
 export class ApiClient {
   constructor(private readonly httpClient = new HttpClient("http://localhost:3000")) {}
 
-  getPosts(sort: PostSort, options?: WithAbortSignal): Promise<PostPreviewDto[]> {
+  getPosts(filter: PostFilter, options?: WithAbortSignal): Promise<PostPreviewDto[]> {
     return this.httpClient.get("/posts", {
       ...options,
-      query: { sort },
+      query: { filter },
       addAuthHeader: true,
     });
   }
