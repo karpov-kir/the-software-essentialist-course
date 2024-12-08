@@ -41,7 +41,7 @@ class HttpClient {
       const token = localStorage.getItem("accessToken");
 
       // If there is no token we still may want to send the request because many endpoints have optional authentication
-      // (e.g. `/posts` endpoint also returns if the current user has voted on the post).
+      // (e.g. `/posts/:id` endpoint also returns if the current member has voted on the post).
       if (!token) {
         return {};
       }
