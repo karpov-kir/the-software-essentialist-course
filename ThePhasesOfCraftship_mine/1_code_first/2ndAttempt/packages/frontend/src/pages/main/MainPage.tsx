@@ -10,7 +10,7 @@ import { ApiClient } from "../../ApiClient";
 import { PostRow } from "../../components/PostRow";
 import { currentUserAtom } from "../../root/currentUserAtom";
 import { computePostVotes } from "../../utils/computeVotes";
-import { PostFilterSwitcher } from "./PostSortSwitcher";
+import { PostFilterSwitcher } from "./PostFilterSwitcher";
 
 export function MainPage() {
   const [filter, setFilter] = useState<PostFilter>(PostFilter.Popular);
@@ -40,7 +40,7 @@ export function MainPage() {
   );
 }
 
-const useFetchPosts = (sort: PostFilter) => {
+const useFetchPosts = (filter: PostFilter) => {
   const [posts, setPosts] = useState<PostPreviewDto[]>([]);
   const [error, setError] = useState<Error | undefined>();
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ const useFetchPosts = (sort: PostFilter) => {
     setIsLoading(true);
 
     new ApiClient()
-      .getPosts(sort, {
+      .getPosts(filter, {
         abortSignal: abortController.signal,
       })
       .then((fetchedPosts) => {
@@ -71,7 +71,7 @@ const useFetchPosts = (sort: PostFilter) => {
     return () => {
       abortController.abort();
     };
-  }, [sort]);
+  }, [filter]);
 
   const [currentUser] = useAtom(currentUserAtom);
 
