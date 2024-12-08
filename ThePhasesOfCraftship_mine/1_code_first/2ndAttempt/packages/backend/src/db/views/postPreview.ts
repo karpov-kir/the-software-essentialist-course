@@ -28,84 +28,78 @@ export const fetchPostPreviews = async (
     onlyNew,
   }: { currentMemberIdToIncludeVote?: number; onlyPopular?: boolean; onlyNew?: boolean } = {},
 ): Promise<PostPreviewDto[]> => {
-  const upvoteCountSubQuery = `(
-    select count(*) from vote_entity
-    where post_id = p.id
-      and type = '${VoteType.Upvote}'
-      and vote_entity.comment_id is null
-  ) as upvoteCount`;
-  const downvoteCountSubQuery = `(
-    select count(*) from vote_entity
-    where post_id = p.id
-      and type = '${VoteType.Downvote}'
-      and vote_entity.comment_id is null
-  ) as downvoteCount`;
-  const commentsUpvoteCountSubQuery = `(
-    select count(*) from vote_entity
-    where post_id = p.id
-      and type = '${VoteType.Upvote}'
-      and vote_entity.comment_id is not null
-  ) as commentsUpvoteCount`;
-  const commentsDownvoteCountSubQuery = `(
-    select count(*) from vote_entity
-    where post_id = p.id
-      and type = '${VoteType.Downvote}'
-      and vote_entity.comment_id is not null
-  ) as commentsDownvoteCount`;
-  const commentCountSubQuery = `(
-    select count(*) from comment_entity as c 
-    where post_id = p.id
-  ) as commentCount`;
-  const memberJoin = `left join member_entity as m on m.id = p.member_id`;
-  const userJoin = `left join user_entity as u on u.id = m.user_id`;
-  const currentMemberVoteJoin = currentMemberIdToIncludeVote
-    ? `left join vote_entity as cmv
-        on cmv.post_id = p.id 
-          and cmv.member_id = :currentMemberIdToIncludeVote
-          and cmv.comment_id is null`
-    : undefined;
-  const joins = [memberJoin, userJoin, currentMemberVoteJoin].filter((join) => join !== undefined).join(" ");
-  const whereCriterion = [
-    "1 = 1",
-    onlyPopular ? `commentCount >= 4` : undefined,
-    onlyNew ? `date(createdAt / 1000, 'unixepoch') >= datetime('now', '-22 days')` : undefined,
-  ]
-    .filter((condition) => condition !== undefined)
-    .join(" and ");
-  const selectColumns = [
-    "p.id",
-    "p.title",
-    "p.content",
-    "p.created_at as createdAt",
+  const knex = em.getKnex();
 
-    "m.id as member_id",
-    "m.user_id as member_userId",
+  const queryBuilder = knex
+    .from("post_entity as p")
+    .select([
+      "p.id",
+      "p.title",
+      "p.content",
+      "p.created_at as createdAt",
 
-    "u.id as member_user_id",
-    "u.first_name as member_user_firstName",
-    "u.last_name as member_user_lastName",
-    "u.email as member_user_email",
-    "u.username as member_user_username",
+      "m.id as member_id",
+      "m.user_id as member_userId",
 
-    ...(currentMemberIdToIncludeVote ? ["cmv.id as currentMemberVote_id", "cmv.type as currentMemberVote_type"] : []),
+      "u.id as member_user_id",
+      "u.first_name as member_user_firstName",
+      "u.last_name as member_user_lastName",
+      "u.email as member_user_email",
+      "u.username as member_user_username",
 
-    upvoteCountSubQuery,
-    downvoteCountSubQuery,
-    commentsUpvoteCountSubQuery,
-    commentsDownvoteCountSubQuery,
-    commentCountSubQuery,
-  ]
-    .filter((column) => column !== undefined)
-    .join(", ");
+      knex
+        .from("vote_entity as v1")
+        .count("*")
+        .as("upvoteCount")
+        .where("v1.post_id", knex.raw("p.id"))
+        .where("v1.type", VoteType.Upvote)
+        .whereNull("comment_id"),
+      knex
+        .from("vote_entity as v2")
+        .count("*")
+        .as("downvoteCount")
+        .where("v2.post_id", knex.raw("p.id"))
+        .where("v2.type", VoteType.Downvote)
+        .whereNull("comment_id"),
 
-  const query = `
-    select ${selectColumns}
-    from post_entity as p
-    ${joins}
-    where ${whereCriterion}
-    order by p.created_at desc
-  `;
+      knex
+        .from("vote_entity as v3")
+        .count("*")
+        .as("commentsUpvoteCount")
+        .where("v3.post_id", knex.raw("p.id"))
+        .where("v3.type", VoteType.Upvote)
+        .whereNotNull("v3.comment_id"),
+      knex
+        .from("vote_entity as v4")
+        .count("*")
+        .as("commentsDownvoteCount")
+        .where("v4.post_id", knex.raw("p.id"))
+        .where("v4.type", VoteType.Downvote)
+        .whereNotNull("v4.comment_id"),
+      knex.from("comment_entity as c").count("*").as("commentCount").where("c.post_id", knex.raw("p.id")),
+    ])
+    .leftJoin("member_entity as m", "m.id", "p.member_id")
+    .leftJoin("user_entity as u", "u.id", "m.user_id")
+    .orderBy("p.created_at", "desc");
 
+  if (currentMemberIdToIncludeVote) {
+    queryBuilder.select("cmv.type as currentMemberVote_type", "cmv.id as currentMemberVote_id");
+    queryBuilder.leftJoin("vote_entity as cmv", function () {
+      this.on("cmv.post_id", "=", "p.id")
+        .on("cmv.member_id", "=", knex.raw("?", [currentMemberIdToIncludeVote]))
+        .onNull("cmv.comment_id");
+    });
+  }
+
+  if (onlyPopular) {
+    queryBuilder.where("commentCount", ">=", 4);
+  }
+
+  if (onlyNew) {
+    queryBuilder.whereRaw("date(createdAt / 1000, 'unixepoch') >= datetime('now', '-22 days')");
+  }
+
+  const query = queryBuilder.toQuery();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rows: Record<string, any>[] = await em.getKnex().raw(query, {
     currentMemberIdToIncludeVote,

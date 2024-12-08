@@ -39,6 +39,7 @@ async function vote(entity: PostEntity | CommentEntity, memberId: number, voteTy
       vote.post = entity;
     } else {
       vote.comment = entity;
+      vote.post = entity.post;
     }
 
     em.persist(vote);
