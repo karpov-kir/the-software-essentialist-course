@@ -1,6 +1,5 @@
 import { PostFilter } from "@dddforum/shared/dist/dtos/PostDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
-import { IsolationLevel } from "@mikro-orm/sqlite";
 import { FastifyInstance } from "fastify";
 
 import { getOrm } from "../db/getOrm";
