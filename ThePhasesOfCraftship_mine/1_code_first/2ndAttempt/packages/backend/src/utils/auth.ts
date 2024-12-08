@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 
-import { getOrm } from "../db/initOrm";
-import { UserEntity } from "../db/UserEntity";
+import { UserEntity } from "../db/entities/UserEntity";
+import { getOrm } from "../db/getOrm";
 
-const jwtSecret = "very-very-sercet";
+const jwtSecret = "very-very-secret";
 
 export const getCurrentUserFromHeaders = async (
   headers: Record<string, string | string[] | undefined>,

@@ -1,11 +1,12 @@
 import { MemberDto } from "./MemberDto";
-import { VoteDto, VoteType } from "./VoteDto";
+import { VoteType } from "./VoteDto";
 
 export interface CommentDto {
   id: number;
   content: string;
   member: MemberDto;
-  votes: VoteDto[];
+  upvoteCount: number;
+  downvoteCount: number;
   // ISO 8601
   createdAt: string;
   currentMemberVoteType?: VoteType;

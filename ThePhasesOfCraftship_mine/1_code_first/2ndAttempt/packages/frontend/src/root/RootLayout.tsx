@@ -20,6 +20,26 @@ import bricksImageUrl from "../images/bricks.png";
 import { currentUserAtom } from "./currentUserAtom";
 import classNames from "./RootLayout.module.css";
 
+export function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AppShell
+      header={{
+        height: 70,
+      }}
+    >
+      <AppShell.Header className={classNames.header}>
+        <Header />
+      </AppShell.Header>
+
+      <AppShell.Main>
+        <Container size="lg" w="100%" mt="lg" mb="lg">
+          {children}
+        </Container>
+      </AppShell.Main>
+    </AppShell>
+  );
+}
+
 function Logo() {
   const linkWrapperStyles: MantineStyleProp = {
     textDecoration: "none",
@@ -79,25 +99,5 @@ function Header() {
         )}
       </Flex>
     </Container>
-  );
-}
-
-export function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AppShell
-      header={{
-        height: 70,
-      }}
-    >
-      <AppShell.Header className={classNames.header}>
-        <Header />
-      </AppShell.Header>
-
-      <AppShell.Main>
-        <Container size="lg" w="100%" mt="lg" mb="lg">
-          {children}
-        </Container>
-      </AppShell.Main>
-    </AppShell>
   );
 }

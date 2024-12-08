@@ -16,9 +16,7 @@ const useInitialize = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const apiClient = new ApiClient();
-
-    apiClient
+    new ApiClient()
       .me()
       .then((fetchedUser) => {
         setCurrentUser(fetchedUser);

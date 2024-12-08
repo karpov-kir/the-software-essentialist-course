@@ -1,0 +1,124 @@
+{
+  "data": {
+    "_id": 5000,
+    "properties": {
+      "id": {
+        "name": "id",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "title": {
+        "name": "title",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "string",
+        "array": false,
+        "runtimeType": "string"
+      },
+      "content": {
+        "name": "content",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "string",
+        "array": false,
+        "runtimeType": "string"
+      },
+      "member": {
+        "name": "member",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "MemberEntity",
+        "array": false,
+        "runtimeType": "MemberEntity"
+      },
+      "upvoteCount": {
+        "name": "upvoteCount",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "downvoteCount": {
+        "name": "downvoteCount",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "commentsUpvoteCount": {
+        "name": "commentsUpvoteCount",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "commentsDownvoteCount": {
+        "name": "commentsDownvoteCount",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "comments": {
+        "name": "comments",
+        "kind": "scalar",
+        "type": "json",
+        "getter": false,
+        "setter": false,
+        "array": true,
+        "runtimeType": "CommentEntity[]"
+      },
+      "createdAt": {
+        "name": "createdAt",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "Date",
+        "array": false,
+        "runtimeType": "Date"
+      },
+      "currentMemberVote": {
+        "name": "currentMemberVote",
+        "kind": "scalar",
+        "type": "json",
+        "getter": false,
+        "setter": false,
+        "array": false,
+        "runtimeType": "VoteEntity",
+        "optional": true
+      }
+    },
+    "primaryKeys": [],
+    "filters": {},
+    "hooks": {},
+    "indexes": [],
+    "uniques": [],
+    "className": "PostDetailsVirtualEntity",
+    "path": "./src/db/views/PostDetailsVirtualEntity.ts",
+    "name": "PostDetailsVirtualEntity",
+    "abstract": false,
+    "internal": true,
+    "constructorParams": [],
+    "toJsonParams": [],
+    "useCache": true,
+    "collection": "post_details_virtual_entity"
+  },
+  "origin": "./src/db/views/PostDetailsVirtualEntity.ts",
+  "hash": "8fe3cacfa30ce5576991056bbd753955",
+  "version": "6.4.0"
+}

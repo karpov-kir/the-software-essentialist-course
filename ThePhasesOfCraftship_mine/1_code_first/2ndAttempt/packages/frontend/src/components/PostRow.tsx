@@ -4,61 +4,65 @@ import { ActionIcon, Flex, Group, Stack, Text } from "@mantine/core";
 import { IconCaretDown, IconCaretUp } from "@tabler/icons-react";
 import { Link } from "react-router";
 
-import { ApiClient } from "../ApiClient";
 import { Meta } from "./Meta";
 import classNames from "./PostRow.module.css";
 
-function PostRating({ post }: { post: PostDetailsDto | PostPreviewDto }) {
-  const postVotesRating = post.votes.reduce((postRating, vote) => {
-    return postRating + (vote.type === VoteType.Upvote ? 1 : -1);
-  }, 0);
-  const postCommentsRating = 0;
+function PostRating({
+  post,
+  onVote,
+}: {
+  post: PostDetailsDto | PostPreviewDto;
+  onVote: (postId: number, voteType: VoteType, action: "add" | "remove") => void;
+}) {
+  let postCommentsRating;
 
   if ("comments" in post) {
-    post.comments.reduce((commentsRating, comment) => {
-      return (
-        commentsRating +
-        comment.votes.reduce((commentRating, vote) => {
-          return commentRating + (vote.type === VoteType.Upvote ? 1 : -1);
-        }, 0)
-      );
+    postCommentsRating = post.comments.reduce((rating, comment) => {
+      const commentVotesRating = comment.upvoteCount - comment.downvoteCount;
+      return rating + commentVotesRating;
     }, 0);
+  } else {
+    postCommentsRating = post.commentsUpvoteCount - post.commentsDownvoteCount;
   }
 
+  const postVotesRating = post.upvoteCount - post.downvoteCount;
   const totalRating = postVotesRating + postCommentsRating;
 
   const upvoteColor = post.currentMemberVoteType === VoteType.Upvote ? "green" : undefined;
   const downvoteColor = post.currentMemberVoteType === VoteType.Downvote ? "red" : undefined;
 
+  const handleVote = (voteType: VoteType) => {
+    const action = post.currentMemberVoteType === voteType ? "remove" : "add";
+    onVote(post.id, voteType, action);
+  };
+
   return (
     <Flex direction="column" align="center">
-      <ActionIcon
-        variant="light"
-        color={upvoteColor}
-        w={40}
-        onClick={() => new ApiClient().voteOnPost(post.id, VoteType.Upvote)}
-      >
+      <ActionIcon variant="light" color={upvoteColor} w={40} onClick={() => handleVote(VoteType.Upvote)}>
         <IconCaretUp />
       </ActionIcon>
       <Text size="lg" fw={500}>
         {totalRating}
       </Text>
-      <ActionIcon
-        variant="light"
-        color={downvoteColor}
-        w={40}
-        onClick={() => new ApiClient().voteOnPost(post.id, VoteType.Downvote)}
-      >
+      <ActionIcon variant="light" color={downvoteColor} w={40} onClick={() => handleVote(VoteType.Downvote)}>
         <IconCaretDown />
       </ActionIcon>
     </Flex>
   );
 }
 
-export function PostRow({ post, full }: { post: PostDetailsDto | PostPreviewDto; full?: boolean }) {
+export function PostRow({
+  post,
+  full,
+  onVote,
+}: {
+  post: PostDetailsDto | PostPreviewDto;
+  full?: boolean;
+  onVote: (postId: number, voteType: VoteType, action: "add" | "remove") => void;
+}) {
   return (
     <Group wrap="nowrap" mb="lg" align="flex-start">
-      <PostRating post={post} />
+      <PostRating post={post} onVote={onVote} />
       <Stack style={{ overflow: "hidden" }} gap="xs">
         <Text
           size="xl"
@@ -74,7 +78,9 @@ export function PostRow({ post, full }: { post: PostDetailsDto | PostPreviewDto;
           member={post.member}
           commentCount={"comments" in post ? post.comments.length : post.commentCount}
         />
-        <Text truncate={full ? undefined : "end"}>{post.content}</Text>
+        <Text truncate={full ? undefined : "end"} className={full ? undefined : classNames["clamp-after-two-lines"]}>
+          {post.content}
+        </Text>
       </Stack>
     </Group>
   );

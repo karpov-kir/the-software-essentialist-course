@@ -8,12 +8,11 @@ import {
 import { signUpDtoSchema } from "@dddforum/shared/dist/validationSchemas/signUpDtoSchema";
 import { FastifyInstance } from "fastify";
 
-import { getOrm } from "../db/initOrm";
-import { UserEntity } from "../db/UserEntity";
+import { toUserDto } from "../db/entities/toDtos";
+import { getOrm } from "../db/getOrm";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { getCurrentUserFromHeaders, newAccessToken } from "../utils/auth";
 import { encryptPassword, isPasswordValid } from "../utils/password";
-import { toUserDto } from "../utils/toDtos";
 
 export const newUsersApi = async (fastify: FastifyInstance) => {
   const { userRepository, orm } = await getOrm();
@@ -55,16 +54,13 @@ export const newUsersApi = async (fastify: FastifyInstance) => {
   fastify.post<{
     Body: SignUpDto;
   }>("/users/sign-up", async (request) => {
-    const { email, password, lastName, firstName, username } = signUpDtoSchema.parse(request.body);
+    const { password, ...restPayload } = signUpDtoSchema.parse(request.body);
 
-    const newUser = new UserEntity();
-    newUser.email = email;
-    newUser.password = await encryptPassword(password);
-    newUser.firstName = firstName;
-    newUser.lastName = lastName;
-    newUser.username = username;
-
-    userRepository.create(newUser);
+    userRepository.create({
+      ...restPayload,
+      password: await encryptPassword(password),
+      createdAt: new Date(),
+    });
 
     try {
       await orm.em.flush();
@@ -78,7 +74,7 @@ export const newUsersApi = async (fastify: FastifyInstance) => {
       throw error;
     }
 
-    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(email) };
+    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(restPayload.email) };
 
     return accessTokenDto;
   });

@@ -2,7 +2,7 @@ import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { IsolationLevel } from "@mikro-orm/sqlite";
 import { FastifyInstance } from "fastify";
 
-import { getOrm } from "../db/initOrm";
+import { getOrm } from "../db/getOrm";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { getCurrentUserFromHeaders } from "../utils/auth";
 import { removeVoteOnComment, voteOnComment } from "../utils/voting";
@@ -57,7 +57,6 @@ export const newCommentsApi = async (fastify: FastifyInstance) => {
     const commentId = parseInt(request.params.id);
 
     await orm.em.transactional((em) => removeVoteOnComment(commentId, member.id, em), {
-      // TODO use unique constraint on smth like vote->member->comment instead of SERIALIZABLE
       isolationLevel: IsolationLevel.SERIALIZABLE,
     });
   });

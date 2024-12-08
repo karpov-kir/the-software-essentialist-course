@@ -5,11 +5,11 @@ import { defineConfig } from "@mikro-orm/sqlite";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { CommentEntity } from "./CommentEntity";
-import { MemberEntity } from "./MemberEntity";
-import { PostEntity } from "./PostEntity";
-import { UserEntity } from "./UserEntity";
-import { VoteEntity } from "./VoteEntity";
+import { CommentEntity } from "./entities/CommentEntity";
+import { MemberEntity } from "./entities/MemberEntity";
+import { PostEntity } from "./entities/PostEntity";
+import { UserEntity } from "./entities/UserEntity";
+import { VoteEntity } from "./entities/VoteEntity";
 
 const __filename = fileURLToPath(import.meta.url);
 const currentDir = path.dirname(__filename);

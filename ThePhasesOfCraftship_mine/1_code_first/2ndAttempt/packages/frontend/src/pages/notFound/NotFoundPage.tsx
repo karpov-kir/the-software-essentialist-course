@@ -7,7 +7,7 @@ export function NotFoundPage() {
     <Fragment>
       <Title>404</Title>
       <p>
-        Oops! The page you are looking for does not exist. You can go back to the{" "}
+        Oops! The page you are looking for does not exist. You can go to the{" "}
         <Text c="blue" component={Link} to="/">
           main page
         </Text>

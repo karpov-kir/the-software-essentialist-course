@@ -2,12 +2,12 @@ import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 
 import { NotFoundError } from "../errors/NotFoundError";
 import { encryptPassword } from "../utils/password";
-import { CommentEntity } from "./CommentEntity";
-import { getOrm } from "./initOrm";
-import { MemberEntity } from "./MemberEntity";
-import { PostEntity } from "./PostEntity";
-import { UserEntity } from "./UserEntity";
-import { VoteEntity } from "./VoteEntity";
+import { CommentEntity } from "./entities/CommentEntity";
+import { MemberEntity } from "./entities/MemberEntity";
+import { PostEntity } from "./entities/PostEntity";
+import { UserEntity } from "./entities/UserEntity";
+import { VoteEntity } from "./entities/VoteEntity";
+import { getOrm } from "./getOrm";
 
 type CreationAttributes<T> = Omit<T, "id">;
 
@@ -423,7 +423,8 @@ export async function seed() {
 
   // Bill is a fan of Bob
   bobComments.forEach((comment) => {
-    commentVotesPayload.push({ comment, type: VoteType.Upvote, member: billMember });
+    const post = posts.find((post) => post.id === comment.post.id);
+    commentVotesPayload.push({ comment, type: VoteType.Upvote, member: billMember, post });
   });
 
   await em.persistAndFlush(

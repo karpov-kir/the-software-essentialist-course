@@ -1,11 +1,11 @@
 import { EntityManager, EntityRepository, MikroORM, Options } from "@mikro-orm/sqlite";
 
-import { CommentEntity } from "./CommentEntity";
 import defaultMicroOrmConfig from "./config";
-import { MemberEntity } from "./MemberEntity";
-import { PostEntity } from "./PostEntity";
-import { UserEntity } from "./UserEntity";
-import { VoteEntity } from "./VoteEntity";
+import { CommentEntity } from "./entities/CommentEntity";
+import { MemberEntity } from "./entities/MemberEntity";
+import { PostEntity } from "./entities/PostEntity";
+import { UserEntity } from "./entities/UserEntity";
+import { VoteEntity } from "./entities/VoteEntity";
 
 export interface OrmServices {
   orm: MikroORM;

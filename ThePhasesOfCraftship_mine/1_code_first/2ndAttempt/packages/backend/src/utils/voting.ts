@@ -1,22 +1,41 @@
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { EntityManager } from "@mikro-orm/sqlite";
 
-import { CommentEntity } from "../db/CommentEntity";
-import { MemberEntity } from "../db/MemberEntity";
-import { PostEntity } from "../db/PostEntity";
-import { VoteEntity } from "../db/VoteEntity";
+import { CommentEntity } from "../db/entities/CommentEntity";
+import { MemberEntity } from "../db/entities/MemberEntity";
+import { PostEntity } from "../db/entities/PostEntity";
+import { VoteEntity } from "../db/entities/VoteEntity";
 import { NotFoundError } from "../errors/NotFoundError";
 
 async function vote(entity: PostEntity | CommentEntity, memberId: number, voteType: VoteType, em: EntityManager) {
-  const existingVote = await em.findOne(VoteEntity, {
-    [entity instanceof PostEntity ? "post" : "comment"]: { id: entity.id },
-    member: { id: memberId },
-  });
+  let existingVote: VoteEntity | null = null;
+
+  if (entity instanceof PostEntity) {
+    existingVote = await em.findOne(VoteEntity, {
+      post: { id: entity.id },
+      comment: {
+        id: null,
+      },
+      member: { id: memberId },
+    });
+  } else {
+    existingVote = await em.findOne(VoteEntity, {
+      comment: { id: entity.id },
+      member: { id: memberId },
+    });
+  }
+
+  console.log(
+    `Member ${memberId} is voting ${voteType} on ${entity instanceof PostEntity ? "post" : "comment"} ${entity.id}`,
+  );
 
   if (existingVote) {
+    console.log(`Found existing vote ${existingVote.type}`);
+
     if (existingVote.type !== voteType) {
       existingVote.type = voteType;
       em.persist(existingVote);
+      console.log(`Changed vote to ${voteType}`);
     }
   } else {
     const vote = new VoteEntity();
@@ -29,8 +48,12 @@ async function vote(entity: PostEntity | CommentEntity, memberId: number, voteTy
       vote.comment = entity;
     }
 
+    console.log(`Created new vote ${voteType}`);
+
     em.persist(vote);
   }
+
+  await em.flush();
 }
 
 export async function voteOnPost(postId: number, memberId: number, voteType: VoteType, em: EntityManager) {

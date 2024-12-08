@@ -1,73 +1,31 @@
+import { PostSort } from "@dddforum/shared/dist/dtos/PostDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
-import { IsolationLevel, raw } from "@mikro-orm/sqlite";
+import { IsolationLevel } from "@mikro-orm/sqlite";
 import { FastifyInstance } from "fastify";
 
-import { CommentEntity } from "../db/CommentEntity";
-import { getOrm } from "../db/initOrm";
-import { PostEntity } from "../db/PostEntity";
+import { getOrm } from "../db/getOrm";
+import { fetchPostDetails } from "../db/views/postDetails";
+import { fetchPostPreviews } from "../db/views/postPreview";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { getCurrentUserFromHeaders } from "../utils/auth";
-import { toPostDetailsDto, toPostPreviewDto } from "../utils/toDtos";
 import { removeVoteOnPost, voteOnPost } from "../utils/voting";
 
 export const newPostsApi = async (fastify: FastifyInstance) => {
-  const { postRepository, orm, forkEm } = await getOrm();
+  const { orm } = await getOrm();
 
   fastify.get<{
     Querystring: { sort?: string };
   }>("/posts", async (request) => {
     const { sort } = request.query;
     const user = await getCurrentUserFromHeaders(request.headers, { includeMember: true });
+    const posts = await fetchPostPreviews(orm.em, {
+      currentMemberIdToIncludeVote: user?.member?.id,
+      onlyNew: sort === PostSort.New,
+      onlyPopular: sort === PostSort.Popular,
+    });
 
-    let posts: PostEntity[];
-
-    // Popular posts with 4 or more comments
-    if (sort === "popular") {
-      const em = forkEm();
-      const knex = em.getKnex();
-      const commentCountQueryBuilder = em
-        .createQueryBuilder(CommentEntity)
-        .count("id")
-        .where({ post: knex.ref("p.id") });
-
-      const postsQueryBuilder = em
-        .createQueryBuilder(PostEntity, "p")
-        .select(["*", raw(`(${commentCountQueryBuilder.getKnexQuery()}) as commentCount`)])
-        .leftJoinAndSelect("p.member", "m")
-        .leftJoinAndSelect("m.user", "mu")
-        .leftJoinAndSelect("p.comments", "c")
-        .leftJoinAndSelect("c.votes", "cv")
-        .leftJoinAndSelect("p.votes", "v")
-        .where(raw("commentCount >= 4"))
-        .orderBy({ "p.createdAt": "DESC" });
-      posts = await postsQueryBuilder.getResultList();
-    }
-    // Posts from the last two weeks
-    else if (sort === "new") {
-      const twoWeeksMs = 1000 * 60 * 60 * 24 * 14;
-      posts = await postRepository.find(
-        {
-          createdAt: { $gte: new Date(Date.now() - twoWeeksMs) },
-        },
-        {
-          populate: ["member", "member.user", "comments", "comments.votes", "votes"],
-          orderBy: { createdAt: "DESC" },
-        },
-      );
-    }
-    // All posts by default
-    else {
-      posts = await postRepository.find(
-        {},
-        {
-          populate: ["member", "member.user", "comments", "comments.votes", "votes"],
-          orderBy: { createdAt: "DESC" },
-        },
-      );
-    }
-
-    return posts.map((post) => toPostPreviewDto(post, user?.member));
+    return posts;
   });
 
   fastify.get<{
@@ -75,28 +33,15 @@ export const newPostsApi = async (fastify: FastifyInstance) => {
   }>("/posts/:id", async (request) => {
     const user = await getCurrentUserFromHeaders(request.headers, { includeMember: true });
     const postId = parseInt(request.params.id);
-    const post = await postRepository.findOne(
-      {
-        id: postId,
-      },
-      {
-        populate: [
-          "member",
-          "member.user",
-          "comments",
-          "comments.votes",
-          "comments.member",
-          "comments.member.user",
-          "votes",
-        ],
-      },
-    );
+    const post = await fetchPostDetails(orm.em, postId, {
+      currentMemberIdToIncludeVote: user?.member?.id,
+    });
 
     if (!post) {
       throw new NotFoundError();
     }
 
-    return toPostDetailsDto(post, user?.member);
+    return post;
   });
 
   fastify.post<{

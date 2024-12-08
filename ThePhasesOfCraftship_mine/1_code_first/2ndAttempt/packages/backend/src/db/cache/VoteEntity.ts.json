@@ -1,0 +1,93 @@
+{
+  "data": {
+    "_id": 0,
+    "properties": {
+      "id": {
+        "name": "id",
+        "kind": "scalar",
+        "primary": true,
+        "type": "number",
+        "array": false,
+        "runtimeType": "number"
+      },
+      "type": {
+        "name": "type",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "VoteType",
+        "array": false,
+        "runtimeType": "VoteType"
+      },
+      "member": {
+        "name": "member",
+        "kind": "m:1",
+        "cascade": [
+          "persist"
+        ],
+        "owner": true,
+        "type": "MemberEntity",
+        "array": false,
+        "runtimeType": "MemberEntity"
+      },
+      "post": {
+        "name": "post",
+        "kind": "m:1",
+        "cascade": [
+          "persist"
+        ],
+        "owner": true,
+        "type": "PostEntity",
+        "array": false,
+        "runtimeType": "PostEntity",
+        "optional": true
+      },
+      "comment": {
+        "name": "comment",
+        "kind": "m:1",
+        "cascade": [
+          "persist"
+        ],
+        "owner": true,
+        "type": "CommentEntity",
+        "array": false,
+        "runtimeType": "CommentEntity",
+        "optional": true
+      },
+      "createdAt": {
+        "name": "createdAt",
+        "kind": "scalar",
+        "getter": false,
+        "setter": false,
+        "type": "Date",
+        "runtimeType": "Date",
+        "array": false
+      }
+    },
+    "primaryKeys": [
+      "id"
+    ],
+    "filters": {},
+    "hooks": {},
+    "indexes": [],
+    "uniques": [
+      {
+        "expression": "create index `vote_entity_id_post_id_comment_id_unique` on vote_entity (`id`, `post_id`, `comment_id`)"
+      }
+    ],
+    "className": "VoteEntity",
+    "path": "./src/db/entities/VoteEntity.ts",
+    "name": "VoteEntity",
+    "abstract": false,
+    "internal": true,
+    "constructorParams": [],
+    "toJsonParams": [],
+    "useCache": true,
+    "compositePK": false,
+    "simplePK": true,
+    "collection": "vote_entity"
+  },
+  "origin": "./src/db/entities/VoteEntity.ts",
+  "hash": "869c5cb3ee4ca0bc7c3de343b20f3053",
+  "version": "6.4.0"
+}

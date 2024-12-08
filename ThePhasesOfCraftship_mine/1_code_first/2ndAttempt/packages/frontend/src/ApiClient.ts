@@ -1,4 +1,4 @@
-import { PostDetailsDto, PostPreviewDto } from "@dddforum/shared/dist/dtos/PostDto";
+import { PostDetailsDto, PostPreviewDto, PostSort } from "@dddforum/shared/dist/dtos/PostDto";
 import { isServerErrorDto, ServerErrorDto } from "@dddforum/shared/dist/dtos/ServerErrorDto";
 import { SignInDto, SignUpDto, UserDto } from "@dddforum/shared/dist/dtos/UserDto";
 import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
@@ -8,7 +8,8 @@ interface WithAbortSignal {
 }
 
 interface HttClientOptions extends WithAbortSignal {
-  withCredentials?: boolean;
+  addAuthHeader?: boolean;
+  query?: Record<string, string>;
 }
 
 export class ServerErrorResponse extends Error {
@@ -23,7 +24,19 @@ export class ServerErrorResponse extends Error {
 class HttpClient {
   constructor(private readonly baseUrl: string) {}
 
-  private getHeaders({ withCredentials }: HttClientOptions): Record<string, string> {
+  private constructUrl(path: string, { query }: HttClientOptions): URL {
+    const url = new URL(path, this.baseUrl);
+
+    if (query) {
+      for (const [key, value] of Object.entries(query)) {
+        url.searchParams.append(key, value);
+      }
+    }
+
+    return url;
+  }
+
+  private prepareHeaders({ addAuthHeader: withCredentials }: HttClientOptions): Record<string, string> {
     if (withCredentials) {
       const token = localStorage.getItem("accessToken");
 
@@ -39,7 +52,7 @@ class HttpClient {
     return {};
   }
 
-  private async processResponse<T>(response: Response): Promise<T> {
+  private async processJsonResponse<T>(response: Response): Promise<T> {
     const responseBody = await response.json();
 
     if (isServerErrorDto(responseBody)) {
@@ -54,63 +67,68 @@ class HttpClient {
   }
 
   async get<T>(path: string, options: HttClientOptions = {}): Promise<T> {
-    const response = await fetch(new URL(path, this.baseUrl), {
-      headers: this.getHeaders(options),
+    const response = await fetch(this.constructUrl(path, options), {
+      headers: this.prepareHeaders(options),
       signal: options.abortSignal,
     });
 
-    return this.processResponse(response);
+    return this.processJsonResponse(response);
   }
 
-  async post<T>(path: string, body: unknown, options: HttClientOptions = {}): Promise<T> {
-    const headers = this.getHeaders(options);
+  async postRaw(path: string, body: unknown, options: HttClientOptions = {}): Promise<Response> {
+    const headers = this.prepareHeaders(options);
 
     if (body) {
       headers["Content-Type"] = "application/json";
     }
 
-    const response = await fetch(new URL(path, this.baseUrl), {
+    return fetch(new URL(path, this.baseUrl), {
       method: "POST",
       headers,
       body: JSON.stringify(body),
       signal: options.abortSignal,
     });
+  }
 
-    return this.processResponse(response);
+  async post<T>(path: string, body: unknown, options: HttClientOptions = {}): Promise<T> {
+    return this.processJsonResponse(await this.postRaw(path, body, options));
+  }
+
+  async deleteRaw(path: string, options: HttClientOptions = {}): Promise<Response> {
+    return fetch(new URL(path, this.baseUrl), {
+      method: "DELETE",
+      headers: this.prepareHeaders(options),
+      signal: options.abortSignal,
+    });
   }
 
   async delete<T>(path: string, options: HttClientOptions = {}): Promise<T> {
-    const response = await fetch(new URL(path, this.baseUrl), {
-      method: "DELETE",
-      headers: this.getHeaders(options),
-      signal: options.abortSignal,
-    });
-
-    return this.processResponse(response);
+    return this.processJsonResponse(await this.deleteRaw(path, options));
   }
 }
 
 export class ApiClient {
   constructor(private readonly httpClient = new HttpClient("http://localhost:3000")) {}
 
-  getPosts(options?: WithAbortSignal): Promise<PostPreviewDto[]> {
+  getPosts(sort: PostSort, options?: WithAbortSignal): Promise<PostPreviewDto[]> {
     return this.httpClient.get("/posts", {
       ...options,
-      withCredentials: true,
+      query: { sort },
+      addAuthHeader: true,
     });
   }
 
   getPost(id: string, options?: WithAbortSignal): Promise<PostDetailsDto> {
     return this.httpClient.get(`/posts/${id}`, {
       ...options,
-      withCredentials: true,
+      addAuthHeader: true,
     });
   }
 
   me(options?: WithAbortSignal): Promise<UserDto> {
     return this.httpClient.get("/users/me", {
       ...options,
-      withCredentials: true,
+      addAuthHeader: true,
     });
   }
 
@@ -122,27 +140,32 @@ export class ApiClient {
     return this.httpClient.post("/users/sign-up", user, options);
   }
 
-  voteOnPost(id: number, voteType: VoteType, options?: WithAbortSignal): Promise<void> {
-    return this.httpClient.post(
+  async voteOnPost(id: number, voteType: VoteType, action: "add" | "remove", options?: WithAbortSignal): Promise<void> {
+    if (action === "remove") {
+      await this.httpClient.deleteRaw(`/posts/${id}/vote`, { ...options, addAuthHeader: true });
+    }
+
+    await this.httpClient.postRaw(
       voteType === VoteType.Upvote ? `/posts/${id}/upvote` : `/posts/${id}/downvote`,
       undefined,
-      { ...options, withCredentials: true },
+      { ...options, addAuthHeader: true },
     );
   }
 
-  removeVoteOnPost(id: number, options?: WithAbortSignal): Promise<void> {
-    return this.httpClient.delete(`/posts/${id}/vote`, { ...options, withCredentials: true });
-  }
+  async voteOnComment(
+    id: number,
+    voteType: VoteType,
+    action: "add" | "remove",
+    options?: WithAbortSignal,
+  ): Promise<void> {
+    if (action === "remove") {
+      await this.httpClient.deleteRaw(`/comments/${id}/vote`, { ...options, addAuthHeader: true });
+    }
 
-  voteOnComment(id: number, voteType: VoteType, options?: WithAbortSignal): Promise<void> {
-    return this.httpClient.post(
+    await this.httpClient.postRaw(
       voteType === VoteType.Upvote ? `/comments/${id}/upvote` : `/comments/${id}/downvote`,
       undefined,
-      { ...options, withCredentials: true },
+      { ...options, addAuthHeader: true },
     );
-  }
-
-  removeVoteOnComment(id: number, options?: WithAbortSignal): Promise<void> {
-    return this.httpClient.delete(`/comments/${id}/vote`, { ...options, withCredentials: true });
   }
 }
