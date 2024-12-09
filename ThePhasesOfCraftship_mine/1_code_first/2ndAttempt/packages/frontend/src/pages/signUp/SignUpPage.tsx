@@ -17,9 +17,10 @@ export function SignUpPage() {
 
   const handleFormSubmit = (signUpDto: SignUpDto) => {
     setIsLoading(true);
+
     const apiClient = new ApiClient();
 
-    new ApiClient()
+    apiClient
       .signUp(signUpDto)
       .then(async ({ accessToken }) => {
         localStorage.setItem("accessToken", accessToken);
