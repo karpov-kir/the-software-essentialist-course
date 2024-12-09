@@ -3,7 +3,7 @@ import { VoteType } from "@dddforum/shared/dist/dtos/VoteDto";
 import { EntityManager } from "@mikro-orm/sqlite";
 
 // Selects all post comments as a JSON array
-const getCommentsSubQuery = (em: EntityManager, currentMemberIdToIncludeVote: number | undefined) => {
+const newCommentsAsJsonSubQuery = (em: EntityManager, currentMemberIdToIncludeVote: number | undefined) => {
   const knex = em.getKnex();
 
   const jsonObjectProperties = [
@@ -109,7 +109,7 @@ export const fetchPostDetails = async (
         .where("type", VoteType.Downvote)
         .whereNull("comment_id"),
 
-      getCommentsSubQuery(em, currentMemberIdToIncludeVote).as("comments"),
+      newCommentsAsJsonSubQuery(em, currentMemberIdToIncludeVote).as("comments"),
     ])
     .where("p.id", postId)
     .leftJoin("member_entity as m", "m.id", "p.member_id")
