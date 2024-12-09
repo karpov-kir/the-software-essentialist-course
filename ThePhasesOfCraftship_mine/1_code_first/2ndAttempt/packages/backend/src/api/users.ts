@@ -54,11 +54,11 @@ export const newUsersApi = async (fastify: FastifyInstance) => {
   fastify.post<{
     Body: SignUpDto;
   }>("/users/sign-up", async (request) => {
-    const { password, ...restPayload } = signUpDtoSchema.parse(request.body);
+    const signUpDto = signUpDtoSchema.parse(request.body);
 
     const user = userRepository.create({
-      ...restPayload,
-      password: await encryptPassword(password),
+      ...signUpDto,
+      password: await encryptPassword(signUpDto.password),
       createdAt: new Date(),
     });
     memberRepository.create({ user, createdAt: new Date() });
@@ -75,7 +75,7 @@ export const newUsersApi = async (fastify: FastifyInstance) => {
       throw error;
     }
 
-    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(restPayload.email) };
+    const accessTokenDto: AccessTokenDto = { accessToken: newAccessToken(user.email) };
 
     return accessTokenDto;
   });
