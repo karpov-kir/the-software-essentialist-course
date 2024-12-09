@@ -1,12 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router";
 
-import classNames from "./main.module.css";
+import { router } from "./routes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <div className={classNames.root}>
-      <h1>DDD forum</h1>
-    </div>
+    <RouterProvider router={router} />
   </React.StrictMode>,
 );
