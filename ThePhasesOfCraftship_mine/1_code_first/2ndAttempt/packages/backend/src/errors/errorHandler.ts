@@ -28,13 +28,13 @@ export function errorHandler(
     error = ValidationError.fromZodError(rawError);
   }
 
-  this.log.error(error);
-
   let type: ServerErrorType;
   if (isServerErrorDto(error)) {
     type = error.type;
   } else {
     type = ServerErrorType.InternalError;
+    // We do not expose details of the internal errors to the client, so it makes sense to log them,
+    // since there is no way to know the details of the error otherwise.
     this.log.error(error);
   }
 
