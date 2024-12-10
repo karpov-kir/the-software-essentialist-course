@@ -40,8 +40,10 @@ curl -X POST http://localhost:3000/users/sign-in -H "Content-Type: application/j
 
 curl -X GET http://localhost:3000/users/me -H "Authorization: Bearer <token>"
 
+# You can optionally add `-H "Authorization: Bearer <token>"` to also get the current member's votes for each post
 curl -X GET http://localhost:3000/posts
 
+# You can optionally add `-H "Authorization: Bearer <token>"` to also get the current member's vote for the post and each comment
 curl -X GET http://localhost:3000/posts/:id
 
 curl -X POST http://localhost:3000/posts/:id/upvote -H "Authorization: Bearer <token>"
