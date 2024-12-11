@@ -24,8 +24,20 @@ export function SignUpPage() {
       .signUp(signUpDto)
       .then(async ({ accessToken }) => {
         localStorage.setItem("accessToken", accessToken);
-        setCurrentUser(await apiClient.me());
-        navigate("/");
+
+        const currentUser = await apiClient.me();
+
+        const notificationId = notifications.show({
+          message: "Signed up successfully! Redirecting home.",
+          color: "green",
+          autoClose: false,
+        });
+
+        setTimeout(() => {
+          notifications.hide(notificationId);
+          setCurrentUser(currentUser);
+          navigate("/");
+        }, 3000);
       })
       .catch((error) => {
         let message = "An error occurred, please try again later";
