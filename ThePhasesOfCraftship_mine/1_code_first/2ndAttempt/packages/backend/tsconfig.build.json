@@ -4,8 +4,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "experimentalDecorators": true
   },
   "references": [
     {
