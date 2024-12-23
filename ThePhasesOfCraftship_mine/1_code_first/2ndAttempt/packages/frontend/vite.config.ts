@@ -14,9 +14,7 @@ export default defineConfig({
         tsconfigPath: "./tsconfig.build.json",
       },
     }),
-    // TODO conditional can be removed once the issue is resolved
-    // https://github.com/teplostanski/vite-plugin-pretty-module-classnames/issues/57#issuecomment-2345238182
-    process.env.VITEST ? undefined : prettyModuleClassnamesPlugin(),
+    prettyModuleClassnamesPlugin(),
     sassDtsPlugin({
       // By default only the `development` mode is enabled, which means that the `d.ts` files are generated only:
       //  - when the `dev` command is running
