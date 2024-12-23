@@ -8,7 +8,7 @@ import simpleImportSortPlugin from "eslint-plugin-simple-import-sort";
 import typescriptEslint from "typescript-eslint";
 
 /**
- * Cast types, this should get fixed with new releases.
+ * Cast types, this should (hopefuly) get fixed with new releases.
  * Although types don't match, everything works well.
  * TODO: Remove the casts when the types are fixed.
  */
