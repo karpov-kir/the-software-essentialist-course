@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "clean": "del-cli ./dist ./tsconfig.build.tsbuildinfo",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "rimraf ./dev.db && npm run migrate && npm run generate",
+    "db:seed": "prisma db seed",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "prisma:generate": "prisma generate",
+    "start": "node --import ./loaders/prod.mjs ./dist/index.js",
+    "start:dev": "npm run db:migrate && npm run prisma:generate && npx nodemon"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.16.2",
+    "prisma": "^4.16.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "extensionless": "^1.9.9"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.17.27",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.14.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.13.0"
+  },
+  "prisma": {
+    "seed": "node --import ./loaders/dev.mjs ./prisma/seed.ts"
+  }
+}
