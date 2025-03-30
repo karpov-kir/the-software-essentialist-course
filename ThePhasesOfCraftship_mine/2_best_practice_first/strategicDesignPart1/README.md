@@ -1,7 +1,7 @@
 # Refactoring to 4 Tiers architecture (unsafely)
 
 - Assignment: https://www.essentialist.dev/products/the-software-essentialist/categories/2155097981/posts/2176565064
-- PR: TBD
+- PR: https://github.com/karpov-kir/the-software-essentialist-course/pull/11
 
 ## Conventions
 
