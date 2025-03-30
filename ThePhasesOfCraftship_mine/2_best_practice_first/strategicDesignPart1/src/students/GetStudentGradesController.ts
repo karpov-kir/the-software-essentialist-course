@@ -12,7 +12,7 @@ export class GetStudentGradesController {
     const { id: studentId } = req.params;
 
     if (!isUuid(studentId)) {
-      throw new ValidationException({ message: 'Invalid student id' });
+      throw new ValidationException({ message: 'Invalid student ID' });
     }
 
     const studentGradesDtos = await this.studentRepository.getGrades(studentId);

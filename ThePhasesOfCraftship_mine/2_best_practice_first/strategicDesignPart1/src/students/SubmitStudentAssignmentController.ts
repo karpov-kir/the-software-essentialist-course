@@ -12,7 +12,7 @@ export class SubmitStudentAssignmentController {
     const studentAssignmentId = req.body?.id;
 
     if (!isUuid(studentAssignmentId)) {
-      throw new ValidationException({ message: 'Invalid assignment id' });
+      throw new ValidationException({ message: 'Invalid assignment ID' });
     }
 
     await this.studentRepository.submitAssignment(studentAssignmentId);

@@ -13,7 +13,7 @@ export class GetAssignmentByIdController {
     const { id: assignmentId } = req.params;
 
     if (!isUuid(assignmentId)) {
-      throw new ValidationException({ message: 'Invalid assignment id' });
+      throw new ValidationException({ message: 'Invalid assignment ID' });
     }
 
     const assignmentDto = await this.assignmentRepository.findById(assignmentId);

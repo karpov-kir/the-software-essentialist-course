@@ -12,7 +12,7 @@ export class GetClassAssignmentsController {
     const { id: classId } = req.params;
 
     if (!isUuid(classId)) {
-      throw new ValidationException({ message: 'Invalid class id' });
+      throw new ValidationException({ message: 'Invalid class ID' });
     }
 
     const classAssignmentDtos = await this.classRepository.getAssignments(classId);

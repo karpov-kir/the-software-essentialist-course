@@ -12,7 +12,7 @@ export class GetStudentByIdController {
     const { id: studentId } = req.params;
 
     if (!isUuid(studentId)) {
-      throw new ValidationException({ message: 'Invalid student id' });
+      throw new ValidationException({ message: 'Invalid student ID' });
     }
 
     const studentDto = await this.studentRepository.findById(studentId);
