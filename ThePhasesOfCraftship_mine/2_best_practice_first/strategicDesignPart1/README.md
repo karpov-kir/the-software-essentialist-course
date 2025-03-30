@@ -5,7 +5,7 @@
 
 ## Conventions
 
-- Modules can import from other modules only from `exports.ts` files (e.g. `import { AssignmentRepository } from '../assignments/exports'`)
+- Modules can import from other modules only from `exports.ts` files (e.g. `import { AssignmentNotFoundException } from '../assignments/exports'`)
 
 ## Getting started
 
