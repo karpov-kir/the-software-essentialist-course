@@ -1,4 +1,4 @@
-import { prisma } from '../src/database';
+import { prisma } from '../src/shared/database';
 
 async function seed() {
   const students = await Promise.all(
@@ -46,7 +46,8 @@ async function seed() {
         data: {
           studentId: students[i].id,
           assignmentId: assignments[j].id,
-          grade: ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)], // Randomly assign grades
+          // Randomly assign grades
+          grade: ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)],
         },
       });
     }

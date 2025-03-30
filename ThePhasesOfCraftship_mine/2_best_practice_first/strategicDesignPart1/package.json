@@ -6,7 +6,7 @@
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "clean": "del-cli ./dist ./tsconfig.build.tsbuildinfo",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "rimraf ./dev.db && npm run migrate && npm run generate",
+    "db:reset": "del-cli ./dev.db && npm run db:migrate && npm run prisma:generate",
     "db:seed": "prisma db seed",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
@@ -16,16 +16,17 @@
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
-    "prisma": "^4.16.2",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "extensionless": "^1.9.9"
+    "express": "^5.0.1",
+    "extensionless": "^1.9.9",
+    "prisma": "^4.16.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.17.27",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.14",
     "del-cli": "^6.0.0",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",

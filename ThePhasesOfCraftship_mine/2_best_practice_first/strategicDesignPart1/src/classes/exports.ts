@@ -1,0 +1,1 @@
+export { ClassNotFoundException } from './classErrors';
