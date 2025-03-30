@@ -12,7 +12,6 @@
 - `npm ci`
 - `npm run start:dev`
 - You can access the application at `http://localhost:3000`
-- You can interact with the API through any API client like Postman, Insomnia or your CLI
 
 ## Database schema
 
