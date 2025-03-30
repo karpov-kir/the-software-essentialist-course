@@ -9,7 +9,7 @@ export function errorHandlerMiddleware(errorOrException: unknown, req: Request, 
     return;
   }
 
-  // Do not expose the details to the client because it might contain sensitive information.
+  // Do not expose the error details to the client because it might contain sensitive information.
   // We should log the error instead.
   console.error('Internal error', errorOrException);
 
