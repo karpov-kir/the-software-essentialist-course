@@ -28,7 +28,6 @@ model ClassEnrollment {
   classId   String
   student   Student @relation(fields: [studentId], references: [id])
   class     Class   @relation(fields: [classId], references: [id])
-
   @@id([studentId, classId])
 }
 
