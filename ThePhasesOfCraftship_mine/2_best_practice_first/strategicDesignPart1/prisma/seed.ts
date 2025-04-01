@@ -1,4 +1,4 @@
-import { prisma } from '../src/database';
+import { prisma } from '../src/shared/database';
 
 async function seed() {
   const students = await Promise.all(
